@@ -10,6 +10,7 @@ The file is a collection of methods used to interact with the DTP.
 For more information, contact the author(s) listed above.
 """
 import argparse
+import json
 import logging
 
 import requests
@@ -347,6 +348,37 @@ class DTPApi(FetchAPI, CountAPI, CreateAPI, LinkAPI, RevertAPI, SendAPI, UpdateA
             query_response_all_pages['size'] += elements['size']
 
         return query_response_all_pages
+
+    def check_if_exist(self, node_iri):
+        """
+        The method check if the node corresponding to the given iri exist or not
+
+        Parameters
+        ----------
+        node_iri: str, obligatory
+            a valid node IRI.
+
+        Returns
+        -------
+        bool
+            return True if the node exist and False otherwise.
+        """
+        if not validators.url(node_iri):
+            raise Exception("Sorry, the IRI is not a valid URL.")
+
+        payload = json.dumps(
+            {
+                "query": {
+                    "$domain": self.DTP_CONFIG.get_domain(),
+                    "$iri": node_iri
+                }
+            }
+        )
+
+        req_url = self.DTP_CONFIG.get_api_url('get_find_elements')
+        response = self.post_general_request(payload, req_url).json()
+
+        return True if response['size'] else False
 
 
 # Below code snippet for testing only
