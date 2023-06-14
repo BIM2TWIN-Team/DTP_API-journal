@@ -21,6 +21,7 @@ try:
     from DTP_config import DTPConfig
 except ModuleNotFoundError:
     import sys
+
     sys.path.append('DTP_API')
     from DTP_config import DTPConfig
 
