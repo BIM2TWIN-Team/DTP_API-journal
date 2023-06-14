@@ -337,7 +337,7 @@ class DTPApi(FetchAPI, CountAPI, CreateAPI, LinkAPI, RevertAPI, SendAPI, UpdateA
         elements = query_response_all_pages
 
         while 'next' in elements.keys() and elements['size'] != 0:
-            if len(fetch_function_arg) > 1:
+            if len(fetch_function_arg):
                 elements = fetch_function(*fetch_function_arg, url=elements['next'])
             else:
                 elements = fetch_function(url=elements['next'])
