@@ -266,7 +266,7 @@ class UpdateAPI:
             if response.ok:
                 if self.session_logger is not None:
                     self.session_logger.info(
-                        f"DTP_API - ADD_PARAM_NODE_OPERATION: {node_iri}, {field}, {field_value}")
+                        f"DTP_API - ADD_PARAM_NODE_OPERATION: {node_iri}, {field}")
                 return True
             else:
                 logger_global.error("Updating nodes failed. Response code: " + str(response.status_code))
