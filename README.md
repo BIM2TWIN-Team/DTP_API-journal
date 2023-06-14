@@ -138,7 +138,7 @@ Below is the rule to generate iri for a new as-performed node from an as-planned
 |-----------------|:------------------------------------------|:-------------------------------------------|
 | Element         | http://bim2twin.eu/mislata/ifc-xyz        | http://bim2twin.eu/mislata/asbuilt-xyz     |
 | Task            | http://bim2twin.eu/mislata/task123        | http://bim2twin.eu/mislata/action123       |
-| Activity        | http://bim2twin.eu/mislata/activity123    | http://bim2twin.eu/mislata/activity123     |
+| Activity        | http://bim2twin.eu/mislata/activity123    | http://bim2twin.eu/mislata/operation123    |
 | Work package    | http://bim2twin.eu/mislata/workpackage123 | http://bim2twin.eu/mislata/construction123 |
 
 ## Examples

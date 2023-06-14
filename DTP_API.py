@@ -100,6 +100,11 @@ class DTPApi(FetchAPI, CountAPI, CreateAPI, LinkAPI, RevertAPI, SendAPI, UpdateA
         except TypeError:  # dictionary merge operator only in python 3.9+
             self.log_markers = {**self.log_markers_node_classes, **other_log_markers}
 
+        self.iri_map = {'ifc': 'asbuilt',
+                        'task': 'action',
+                        'activity': 'operation',
+                        'workpackage': 'construction'}
+
     def init_logger(self, session_file):
         """
         Method used for initializing a logger used to collect information about session: only node linking
@@ -347,6 +352,24 @@ class DTPApi(FetchAPI, CountAPI, CreateAPI, LinkAPI, RevertAPI, SendAPI, UpdateA
             query_response_all_pages['size'] += elements['size']
 
         return query_response_all_pages
+
+    def create_as_performed_iri(self, as_planned_iri):
+        """
+        Create as-performed iri from as-planned iri
+
+        Parameters
+        ----------
+        as_planned_iri: str, obligatory
+            an as-planned valid IRI
+
+        Returns
+        -------
+        str
+            Returns as-performed iri
+        """
+        for iri_sub_str in self.iri_map:
+            if iri_sub_str in as_planned_iri:
+                return as_planned_iri.replace(iri_sub_str, self.iri_map[iri_sub_str])
 
 
 # Below code snippet for testing only
