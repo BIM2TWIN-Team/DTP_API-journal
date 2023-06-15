@@ -293,7 +293,7 @@ class DTPApi(FetchAPI, CountAPI, CreateAPI, LinkAPI, RevertAPI, SendAPI, UpdateA
                     self.add_param_in_node(node_iri, field, field_value)
                     counter += 1
                 elif self.log_markers['add_param'] in line:
-                    node_iri, field = get_info_from_log(line, self.log_markers['remove_param'])
+                    node_iri, field = get_info_from_log(line, self.log_markers['add_param'])
                     self.delete_param_in_node(node_iri, field, is_revert_session=True)
                     counter += 1
                 else:
@@ -335,7 +335,7 @@ class DTPApi(FetchAPI, CountAPI, CreateAPI, LinkAPI, RevertAPI, SendAPI, UpdateA
         elements = query_response_all_pages
 
         while 'next' in elements.keys() and elements['size'] != 0:
-            if len(fetch_function_arg) > 1:
+            if len(fetch_function_arg):
                 elements = fetch_function(*fetch_function_arg, url=elements['next'])
             else:
                 elements = fetch_function(url=elements['next'])
