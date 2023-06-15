@@ -149,17 +149,31 @@ demonstration, session logger will be only used in `create_DTP_API`, `link_DTP_A
 Count task nodes connected to a node identified by `activity_node_iri`
 
 ```shell
-python3 count_activity_tasks.py --xml_path ../DTP_config.xml -l /path/to/logdir
+python3 count_activity_tasks.py --xml_path ../DTP_config.xml
 ```
 
 Fetch operation nodes connected to a node identified by `constr_node_iri`
 
 ```shell
-python3 fetch_construction_operation.py --xml_path ../DTP_config.xml -l /path/to/logdir
+python3 fetch_construction_operation.py --xml_path ../DTP_config.xml
 ```
 
 Fetch all activity node in the graph
 
 ```shell
-python3 fetch_all_activity.py --xml_path ../DTP_config.xml -l /path/to/logdir
+python3 fetch_all_activity.py --xml_path ../DTP_config.xml
 ```
+
+Create as-built from as-designed node
+
+```shell
+python3 asdesigned2asbuilt.py --xml_path ../DTP_config.xml
+```
+
+Demonstrates how to session logger
+
+```shell
+python3 use_session_logger.py --xml_path ../DTP_config.xml -l /path/to/logdir
+```
+
+Please note session logger is not used in Fetch APIs. You should see an empty log file when you run the above command.
