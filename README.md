@@ -167,7 +167,7 @@ python3 fetch_all_activity.py --xml_path ../DTP_config.xml
 Create as-built from as-designed node
 
 ```shell
-python3 asdesigned2asbuilt.py --xml_path ../DTP_config.xml
+python3 asdesigned_to_asbuilt.py --xml_path ../DTP_config.xml -l /path/to/logdir
 ```
 
 Demonstrates how to session logger
