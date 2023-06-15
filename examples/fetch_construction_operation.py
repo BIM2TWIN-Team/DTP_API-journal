@@ -35,6 +35,6 @@ if __name__ == "__main__":
     args = parse_args()
     dtp_config = DTPConfig(args.xml_path)
     dtp_api = DTPApi(dtp_config, simulation_mode=args.simulation)
-    response = dtp_api.construction_fetch_connected_operation_nodes(
+    response = dtp_api.fetch_constr_connected_oper_nodes(
         "http://bim2twin.eu/mislata_wp3/construction91227950")
     print('Response:\n', response)
