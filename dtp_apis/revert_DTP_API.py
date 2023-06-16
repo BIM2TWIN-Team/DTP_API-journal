@@ -159,6 +159,10 @@ class RevertAPI:
                 return False
         return True
 
+    def unlink_element_type(self, node_iri, link_label):
+        # TODO: complete unlink API
+        pass
+
     def delete_blob_from_platform(self, blob_uuid):
         """
         The method deletes a blob from DTP

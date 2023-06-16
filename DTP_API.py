@@ -95,7 +95,8 @@ class DTPApi(FetchAPI, CountAPI, CreateAPI, LinkAPI, RevertAPI, SendAPI, UpdateA
                              'update_operation': 'UPDATE_OPERATION_IRI',
                              'update_construction': 'UPDATE_CONSTRUCTION_IRI',
                              'remove_param': 'REMOVED_PARAM_NODE_OPERATION',
-                             'add_param': 'ADD_PARAM_NODE_OPERATION'}
+                             'add_param': 'ADD_PARAM_NODE_OPERATION',
+                             'link_element_type': 'NEW_LINK_ELEMENT_ELEMENT_TYPE'}
 
         try:
             self.log_markers = self.log_markers_node_classes | other_log_markers
@@ -297,6 +298,10 @@ class DTPApi(FetchAPI, CountAPI, CreateAPI, LinkAPI, RevertAPI, SendAPI, UpdateA
                 elif self.log_markers['add_param'] in line:
                     node_iri, field = get_info_from_log(line, self.log_markers['add_param'])
                     self.delete_param_in_node(node_iri, field, is_revert_session=True)
+                    counter += 1
+                elif self.log_markers['link_element_type'] in line:
+                    node_iri, element_type_iri = get_info_from_log(line, self.log_markers['link_element_type'])
+                    self.unlink_element_type(node_iri, element_type_iri)
                     counter += 1
                 else:
                     try:

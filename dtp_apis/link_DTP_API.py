@@ -99,6 +99,44 @@ class LinkAPI:
                 return False
         return True
 
+    def link_node_element_to_element_type(self, element_node_iri, element_type_iri):
+        """
+        The method links an element node to element type
+
+        Parameters
+        ----------
+        element_node_iri : str, obligatory
+            a valid element IRI of an element
+        element_type_iri : str, obligatory
+            a valid element type IRI
+
+        Returns
+        ------
+        bool
+            True if the element has been linked with a element type, and False otherwise
+        """
+
+        payload = json.dumps([{
+            "_domain": self.DTP_CONFIG.get_domain(),
+            "_iri": element_node_iri,
+            "_outE": [{
+                "_label": self.DTP_CONFIG.get_ontology_uri('hasElementType'),
+                "_targetIRI": element_type_iri
+            }]
+        }])
+
+        response = self.put_guarded_request(payload=payload, url=self.DTP_CONFIG.get_api_url('update_set'))
+        if not self.simulation_mode:
+            if response.ok:
+                if self.session_logger is not None:
+                    self.session_logger.info(
+                        f"DTP_API - NEW_LINK_ELEMENT_ELEMENT_TYPE: {element_node_iri}, {element_type_iri}")
+                return True
+            else:
+                logger_global.error("Linking nodes failed. Response code: " + str(response.status_code))
+                return False
+        return True
+
     def link_node_operation_to_action(self, oper_node_iri, action_node_iri):
         """
         The method links an action with an operation.
