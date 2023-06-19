@@ -170,7 +170,7 @@ Create as-built from as-designed node
 python3 asdesigned_to_asbuilt.py --xml_path ../DTP_config.xml -l /path/to/logdir
 ```
 
-Demonstrates how to session logger
+Demonstrates how to use session logger
 
 ```shell
 python3 use_session_logger.py --xml_path ../DTP_config.xml -l /path/to/logdir
