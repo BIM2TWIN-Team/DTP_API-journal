@@ -159,9 +159,42 @@ class RevertAPI:
                 return False
         return True
 
-    def unlink_element_type(self, node_iri, link_label):
-        # TODO: complete unlink API
-        pass
+    def unlink_element_type(self, node_iri, target_iri):
+        """
+        Unlink element type from a node
+
+        Parameters
+        ----------
+        node_iri: str, obligatory
+            an iri of a node
+        target_iri: str, obligatory
+            an iri of a target linked node
+
+        Returns
+        -------
+        bool
+            True if the node is unlinked and False otherwise
+        """
+        payload = json.dumps([{
+            "_domain": self.DTP_CONFIG.get_domain(),
+            "_iri": node_iri,
+            "_outE": [
+                {
+                    "_label": self.DTP_CONFIG.get_ontology_uri('hasElementType'),
+                    "_targetIRI": target_iri
+                }
+            ]
+        }])
+        response = self.put_guarded_request(payload=payload, url=self.DTP_CONFIG.get_api_url('update_unset'))
+        if not self.simulation_mode:
+            if response.ok:
+                logger_global.info(f"Removed link {self.DTP_CONFIG.get_ontology_uri('hasElementType')} from {node_iri} "
+                                   f"to {target_iri}")
+                return True
+            else:
+                logger_global.error("Unlink nodes failed. Response code: " + str(response.status_code))
+                return False
+        return True
 
     def delete_blob_from_platform(self, blob_uuid):
         """
