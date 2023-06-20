@@ -132,14 +132,15 @@ external configuration file to make the implementation general and easy to maint
 
 ## Creating IRI for new as-performed nodes
 
-Below is the rule to generate iri for a new as-performed node from an as-planned node iri.
+Below is the rule to generate iri for a new as-performed node from an as-planned node iri. `create_as_performed_iri`
+function in `helpers.py` can help you create as-performed iri from as-planned iri.
 
-| As-planned type | As-planned IRI                            | As-performed IRI                           |
-|-----------------|:------------------------------------------|:-------------------------------------------|
-| Element         | http://bim2twin.eu/mislata/ifc-xyz        | http://bim2twin.eu/mislata/asbuilt-xyz     |
-| Task            | http://bim2twin.eu/mislata/task123        | http://bim2twin.eu/mislata/action123       |
-| Activity        | http://bim2twin.eu/mislata/activity123    | http://bim2twin.eu/mislata/operation123    |
-| Work package    | http://bim2twin.eu/mislata/workpackage123 | http://bim2twin.eu/mislata/construction123 |
+| As-planned type | As-planned IRI                           | As-performed IRI                          |
+|-----------------|:-----------------------------------------|:------------------------------------------|
+| Element         | http://bim2twin.eu/domain/ifc-xyz        | http://bim2twin.eu/domain/asbuilt-xyz     |
+| Task            | http://bim2twin.eu/domain/task123        | http://bim2twin.eu/domain/action123       |
+| Activity        | http://bim2twin.eu/domain/activity123    | http://bim2twin.eu/domain/operation123    |
+| Work package    | http://bim2twin.eu/domain/workpackage123 | http://bim2twin.eu/domain/construction123 |
 
 ## Examples
 
@@ -170,7 +171,7 @@ Create as-built from as-designed node
 python3 asdesigned_to_asbuilt.py --xml_path ../DTP_config.xml -l /path/to/logdir
 ```
 
-Demonstrates how to use session logger
+Demonstrates usage of session logger
 
 ```shell
 python3 use_session_logger.py --xml_path ../DTP_config.xml -l /path/to/logdir
