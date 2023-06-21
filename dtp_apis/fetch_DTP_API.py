@@ -261,6 +261,42 @@ class FetchAPI:
         req_url = self.DTP_CONFIG.get_api_url('get_find_elements') if not url else url
         return self.post_general_request(payload, req_url).json()
 
+    def fetch_nodes_with_element_type(self, element_type_iri, node_type, url=None):
+
+        node_types = ['asbuilt', 'asdesigned', 'all']
+        assert node_type in node_types, f"node_type should be within {node_types}"
+
+        sub_query = {
+            "$alias": "result",
+            "$classes": {
+                "$contains": self.DTP_CONFIG.get_ontology_uri('classElement'),
+                "$inheritance": True}
+        }
+
+        if node_type == 'asbuilt':
+            sub_query[self.DTP_CONFIG.get_ontology_uri('isAsDesigned')] = False
+        elif node_type == 'asdesigned':
+            sub_query[self.DTP_CONFIG.get_ontology_uri('isAsDesigned')] = True
+
+        payload = json.dumps({
+            "query": [
+                {
+                    "$domain": self.DTP_CONFIG.get_domain(),
+                    "$classes": {
+                        "$contains": self.DTP_CONFIG.get_ontology_uri('classElement'),
+                        "$inheritance": True
+                    },
+                    "$iri": element_type_iri,
+                    f"<-{self.DTP_CONFIG.get_ontology_uri('hasElementType')}": {"$alias": "result"}
+                },
+                sub_query
+            ],
+            "return": "result"
+        })
+
+        req_url = self.DTP_CONFIG.get_api_url('get_find_elements') if not url else url
+        return self.post_general_request(payload, req_url).json()
+
     def fetch_construction_nodes(self, url=None):
         """
         The method queries construction nodes from the platform.
