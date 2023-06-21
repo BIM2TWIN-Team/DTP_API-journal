@@ -82,10 +82,13 @@ class CreateAPI:
                     self.DTP_CONFIG.get_ontology_uri('isAsDesigned'): False,
                     self.DTP_CONFIG.get_ontology_uri('timeStamp'): timestamp,
                     self.DTP_CONFIG.get_ontology_uri('progress'): progress,
-                    self.DTP_CONFIG.get_ontology_uri('hasElementType'): element_type,
                     self.DTP_CONFIG.get_ontology_uri('hasGeometryStatusType'): self.DTP_CONFIG.get_ontology_uri(
                         'CompletelyDetected'),
                     "_outE": [
+                        {
+                            "_label": self.DTP_CONFIG.get_ontology_uri('hasElementType'),
+                            "_targetIRI": element_type
+                        },
                         {
                             "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
                             "_targetIRI": target_iri
@@ -102,8 +105,11 @@ class CreateAPI:
                     self.DTP_CONFIG.get_ontology_uri('isAsDesigned'): False,
                     self.DTP_CONFIG.get_ontology_uri('timeStamp'): timestamp,
                     self.DTP_CONFIG.get_ontology_uri('progress'): progress,
-                    self.DTP_CONFIG.get_ontology_uri('hasElementType'): element_type,
                     "_outE": [
+                        {
+                            "_label": self.DTP_CONFIG.get_ontology_uri('hasElementType'),
+                            "_targetIRI": element_type
+                        },
                         {
                             "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
                             "_targetIRI": target_iri
