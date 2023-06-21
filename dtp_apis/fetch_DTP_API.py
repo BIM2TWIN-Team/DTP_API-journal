@@ -262,6 +262,23 @@ class FetchAPI:
         return self.post_general_request(payload, req_url).json()
 
     def fetch_nodes_with_element_type(self, element_type_iri, node_type, url=None):
+        """
+        Fetch nodes with an element type identified by its iri and node types
+
+        Parameters
+        ----------
+        element_type_iri: str, obligatory
+            the valid element type IRI
+        node_type: str, obligatory
+            node type ['asbuilt', 'asdesigned', 'all']
+        url : str, optional
+            used to fetch a next page
+
+        Returns
+        -------
+        dictionary
+            JSON mapped to a dictionary. The data contain elements with specified element type.
+        """
 
         node_types = ['asbuilt', 'asdesigned', 'all']
         assert node_type in node_types, f"node_type should be within {node_types}"
