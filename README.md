@@ -170,11 +170,3 @@ Create as-built from as-designed node
 ```shell
 python3 asdesigned_to_asbuilt.py --xml_path ../DTP_config.xml -l /path/to/logdir
 ```
-
-Demonstrates usage of session logger
-
-```shell
-python3 use_session_logger.py --xml_path ../DTP_config.xml -l /path/to/logdir
-```
-
-Please note session logger is not used in Fetch APIs. You should see an empty log file when you run the above command.
