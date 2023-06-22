@@ -185,12 +185,10 @@ def create_logger_global(log_dir):
     -------
         logger object
     """
-    if not os.path.exists(log_dir):
-        os.makedirs(log_dir)
     log_filename = os.path.join(log_dir, 'global.log')
     formatter = logging.Formatter('%(asctime)s : %(levelname)s : %(message)s', datefmt='%d-%b-%y %H:%M:%S')
     return create_logger(log_filename, formatter, logging.DEBUG)
 
 
 dtp_config = DTPConfig('../DTP_config.xml')
-globals()['logger_global'] = create_logger_global(dtp_config.get_global_log_path())
+globals()['logger_global'] = create_logger_global(dtp_config.get_log_path())

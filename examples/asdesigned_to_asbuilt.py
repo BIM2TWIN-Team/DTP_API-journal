@@ -4,8 +4,6 @@
 #  This file cannot be used without a written permission from the author(s).
 
 import argparse
-import os
-import time
 from datetime import datetime
 
 try:
@@ -38,12 +36,6 @@ if __name__ == "__main__":
     args = parse_args()
     dtp_config = DTPConfig(args.xml_path)
     dtp_api = DTPApi(dtp_config, simulation_mode=args.simulation)
-
-    # initialise session logger
-    if not os.path.exists(args.log_dir):
-        os.makedirs(args.log_dir)
-    log_path = os.path.join(args.log_dir, f"db_session-{time.strftime('%Y%m%d-%H%M%S')}.log")
-    dtp_api.init_logger(log_path)
 
     elements = dtp_api.query_all_pages(dtp_api.fetch_asdesigned_nodes, "ifc:Class", "IfcWall")
 
