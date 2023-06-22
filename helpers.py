@@ -7,7 +7,10 @@
 import logging
 import logging.config
 import multiprocessing
+import os
 from datetime import datetime
+
+from DTP_config import DTPConfig
 
 
 def get_element_type(DTP_CONFIG, element):
@@ -110,7 +113,19 @@ def create_as_performed_iri(as_planned_iri):
 
 
 def read_ply_collection_date(ply_path):
-    comment_date_begin = 'comment collected'
+    """
+    Read acquisition data from ply files
+
+    Parameters
+    ----------
+    ply_path: str
+        path to ply files
+
+    Returns
+    -------
+        returns date
+    """
+    comment_date_begin = 'acquisition date'
     file = open(ply_path, 'r')
     collection_date = ''
     for line in file:
@@ -126,8 +141,25 @@ def read_ply_collection_date(ply_path):
     return datetime.strptime(collection_date, '%Y-%m-%d')
 
 
-# based on function from https://stackoverflow.com/questions/641420/how-should-i-log-while-using-multiprocessing-in-python
 def create_logger(log_filename, formatter, level):
+    """
+    Multi-processing logger. Based on function from
+    https://stackoverflow.com/questions/641420/how-should-i-log-while-using-multiprocessing-in-python
+
+    Parameters
+    ----------
+    log_filename: str
+        path to the log file
+    formatter: obj
+        logging formatter
+    level: obj
+        debug level
+
+    Returns
+    -------
+        logger object
+    """
+
     logger = multiprocessing.get_logger()
     logger.setLevel(level)
     handler = logging.FileHandler(log_filename)
@@ -140,11 +172,25 @@ def create_logger(log_filename, formatter, level):
     return logger
 
 
-def create_logger_global():
-    # todo: to log file name should come from the config xml file
-    log_filename = 'DTP_WP3.log'
+def create_logger_global(log_dir):
+    """
+    Create global logger
+
+    Parameters
+    ----------
+    log_dir: str
+        Path to the log directory
+
+    Returns
+    -------
+        logger object
+    """
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
+    log_filename = os.path.join(log_dir, 'global.log')
     formatter = logging.Formatter('%(asctime)s : %(levelname)s : %(message)s', datefmt='%d-%b-%y %H:%M:%S')
     return create_logger(log_filename, formatter, logging.DEBUG)
 
 
-globals()['logger_global'] = create_logger_global()
+dtp_config = DTPConfig('../DTP_config.xml')
+globals()['logger_global'] = create_logger_global(dtp_config.get_global_log_path())

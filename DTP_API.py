@@ -329,14 +329,19 @@ class DTPApi(FetchAPI, CountAPI, CreateAPI, LinkAPI, RevertAPI, SendAPI, UpdateA
 
     def query_all_pages(self, fetch_function, *fetch_function_arg):
         """
-        The method will query all pages for a query
+        The method will query all pages for an API methods
 
-        Args:
-            fetch_function: function used to query DTP
-            fetch_function_arg: arguments to fetch_function
+        Parameters
+        ----------
+        fetch_function:
+            function used to query DTP
+        fetch_function_arg: tuple
+            arguments to fetch_function
 
-        Returns:
-
+        Returns
+        -------
+        dictionary
+            JSON mapped to a dictionary. The data contain nodes from all pages.
         """
         query_response_all_pages = fetch_function(*fetch_function_arg)
         elements = query_response_all_pages
