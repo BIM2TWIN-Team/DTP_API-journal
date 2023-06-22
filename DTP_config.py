@@ -111,7 +111,10 @@ class DTPConfig:
         if self.kpi_domain[-1] != '/':
             self.kpi_domain = self.kpi_domain + '/'
 
-        self.global_log = config.find('GLOBAL_LOG').text.strip(' \t\n\r')
+        self.log_dir = config.find('LOG_DIR').text.strip(' \t\n\r')
+        assert self.log_dir != "/path/to/log/dir", "Please set LOG_DIR in DTP_config.xml"
+        if not os.path.exists(self.log_dir):
+            os.makedirs(self.log_dir)
 
         self.api_uris = {}
         uris = config.find('API_URLS')
@@ -155,8 +158,8 @@ class DTPConfig:
     def get_version(self):
         return self.version
 
-    def get_global_log_path(self):
-        return self.global_log
+    def get_log_path(self):
+        return self.log_dir
 
     def get_object_types(self):
         return self.objet_types

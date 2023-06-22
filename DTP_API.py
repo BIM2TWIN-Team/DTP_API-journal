@@ -12,6 +12,8 @@ For more information, contact the author(s) listed above.
 import argparse
 import json
 import logging
+import os
+import time
 
 import requests
 import validators
@@ -102,6 +104,13 @@ class DTPApi(FetchAPI, CountAPI, CreateAPI, LinkAPI, RevertAPI, SendAPI, UpdateA
             self.log_markers = self.log_markers_node_classes | other_log_markers
         except TypeError:  # dictionary merge operator only in python 3.9+
             self.log_markers = {**self.log_markers_node_classes, **other_log_markers}
+
+        # initialise session logger
+        log_dir = os.path.join(self.DTP_CONFIG.get_log_path(), "sessions")
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
+        log_path = os.path.join(log_dir, f"db_session-{time.strftime('%Y%m%d-%H%M%S')}.log")
+        self.init_logger(log_path)
 
     def init_logger(self, session_file):
         """
