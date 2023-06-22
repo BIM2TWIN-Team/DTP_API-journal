@@ -21,26 +21,6 @@ import helpers
 from helpers import logger_global
 
 
-def is_asdesigned(dtp_config, element):
-    if dtp_config.get_ontology_uri('isAsDesigned') in element.keys():
-        if element[dtp_config.get_ontology_uri('isAsDesigned')]:
-            return True
-        else:
-            return False
-    else:
-        return True
-
-
-def create_iri_as_built(as_designed_iri, nb_connected_components):
-    base_name_as_designed = os.path.basename(as_designed_iri)
-    if base_name_as_designed.lower().find('ifc') >= 0:
-        as_built_iri = as_designed_iri.replace('ifc', 'asbuilt') + '_' + str(nb_connected_components + 1)
-    else:
-        as_built_iri = os.path.dirname(as_designed_iri) + '/asbuilt' + base_name_as_designed + '_' + str(
-            nb_connected_components + 1)
-    return as_built_iri
-
-
 def parse_args():
     """
     Get parameters from user
@@ -65,16 +45,10 @@ if __name__ == "__main__":
     log_path = os.path.join(args.log_dir, f"db_session-{time.strftime('%Y%m%d-%H%M%S')}.log")
     dtp_api.init_logger(log_path)
 
-    elements = dtp_api.query_all_pages(dtp_api.fetch_element_nodes, "ifc:Class", "IfcWall")
+    elements = dtp_api.query_all_pages(dtp_api.fetch_asdesigned_nodes, "ifc:Class", "IfcWall")
 
     for element in elements['items']:
-        if is_asdesigned(dtp_config, element):  # this soon should not be needed
-            asbuild_iri = create_iri_as_built(element['_iri'], 0)
-            timestamp = helpers.get_timestamp_dtp_format(datetime.now())
-            element_type = helpers.get_element_type(dtp_config, element)
-
-            # this soon should not be needed
-            if element_type.strip() in dtp_config.get_object_type_conversion_map().keys():
-                element_type = dtp_config.get_object_type_conversion_map()[element_type.strip()]
-
-            dtp_api.create_asbuilt_node(asbuild_iri, 100, timestamp, element_type, element['_iri'])
+        asbuild_iri = helpers.create_as_performed_iri(element['_iri'])
+        timestamp = helpers.get_timestamp_dtp_format(datetime.now())
+        element_type = dtp_config.get_ontology_uri('Wall')
+        dtp_api.create_asbuilt_node(asbuild_iri, 100, timestamp, element_type, element['_iri'])
