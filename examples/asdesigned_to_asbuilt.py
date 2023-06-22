@@ -4,8 +4,6 @@
 #  This file cannot be used without a written permission from the author(s).
 
 import argparse
-import os
-import time
 from datetime import datetime
 
 try:
