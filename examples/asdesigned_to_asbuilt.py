@@ -45,7 +45,7 @@ if __name__ == "__main__":
     log_path = os.path.join(args.log_dir, f"db_session-{time.strftime('%Y%m%d-%H%M%S')}.log")
     dtp_api.init_logger(log_path)
 
-    elements = dtp_api.query_all_pages(dtp_api.fetch_asbuilt_nodes, "ifc:Class", "IfcWall")
+    elements = dtp_api.query_all_pages(dtp_api.fetch_asdesigned_nodes, "ifc:Class", "IfcWall")
 
     for element in elements['items']:
         asbuild_iri = helpers.create_as_performed_iri(element['_iri'])
