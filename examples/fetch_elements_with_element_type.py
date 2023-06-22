@@ -21,8 +21,10 @@ def parse_args():
     Get parameters from user
     """
     parser = argparse.ArgumentParser(description='Fetch all element with element type')
-    parser.add_argument('--xml_path', '-x', type=str, help='path to config xml file', required=True)
+    parser.add_argument('--xml_path', '-x', type=str, help='path to config xml file', default='../DTP_config.xml')
     parser.add_argument('--simulation', '-s', default=False, action='store_true')
+    parser.add_argument('--node_type', '-n', type=str, choices=['asbuilt', 'asdesigned', 'all'],
+                        help='type of nodes to be updated', default='asdesigned')
 
     return parser.parse_args()
 
@@ -32,5 +34,5 @@ if __name__ == "__main__":
     dtp_config = DTPConfig(args.xml_path)
     dtp_api = DTPApi(dtp_config, simulation_mode=args.simulation)
     response = dtp_api.query_all_pages(dtp_api.fetch_nodes_with_element_type, dtp_config.get_ontology_uri('Wall'),
-                                       "asbuilt")
+                                       args.node_type)
     print('Response:\n', response)

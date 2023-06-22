@@ -5,8 +5,6 @@
 #  This file cannot be used without a written permission from the author(s).
 
 import argparse
-import os
-import time
 
 try:
     from DTP_config import DTPConfig
@@ -24,7 +22,7 @@ def parse_args():
     Get parameters from user
     """
     parser = argparse.ArgumentParser(description='Fetech all activity nodes from the platform')
-    parser.add_argument('--xml_path', '-x', type=str, help='path to config xml file', required=True)
+    parser.add_argument('--xml_path', '-x', type=str, help='path to config xml file', default='../DTP_config.xml')
     parser.add_argument('--simulation', '-s', default=False, action='store_true')
 
     return parser.parse_args()
