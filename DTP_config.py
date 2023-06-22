@@ -111,6 +111,8 @@ class DTPConfig:
         if self.kpi_domain[-1] != '/':
             self.kpi_domain = self.kpi_domain + '/'
 
+        self.global_log = config.find('GLOBAL_LOG').text.strip(' \t\n\r')
+
         self.api_uris = {}
         uris = config.find('API_URLS')
         if not uris is None:
@@ -152,6 +154,9 @@ class DTPConfig:
 
     def get_version(self):
         return self.version
+
+    def get_global_log_path(self):
+        return self.global_log
 
     def get_object_types(self):
         return self.objet_types
