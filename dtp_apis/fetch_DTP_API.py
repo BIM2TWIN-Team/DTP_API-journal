@@ -284,10 +284,12 @@ class FetchAPI:
         assert node_type in node_types, f"node_type should be within {node_types}"
 
         sub_query = {
+            "$domain": self.DTP_CONFIG.get_domain(),
             "$alias": "result",
             "$classes": {
                 "$contains": self.DTP_CONFIG.get_ontology_uri('classElement'),
-                "$inheritance": True}
+                "$inheritance": True
+            }
         }
 
         if node_type == 'asbuilt':
@@ -298,11 +300,6 @@ class FetchAPI:
         payload = json.dumps({
             "query": [
                 {
-                    "$domain": self.DTP_CONFIG.get_domain(),
-                    "$classes": {
-                        "$contains": self.DTP_CONFIG.get_ontology_uri('classElement'),
-                        "$inheritance": True
-                    },
                     "$iri": element_type_iri,
                     f"<-{self.DTP_CONFIG.get_ontology_uri('hasElementType')}": {"$alias": "result"}
                 },
