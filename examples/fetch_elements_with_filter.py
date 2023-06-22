@@ -4,8 +4,6 @@
 #  This file cannot be used without a written permission from the author(s).
 
 import argparse
-import os
-import time
 
 try:
     from DTP_config import DTPConfig
@@ -23,7 +21,7 @@ def parse_args():
     Get parameters from user
     """
     parser = argparse.ArgumentParser(description='Fetch all element with additional filter')
-    parser.add_argument('--xml_path', '-x', type=str, help='path to config xml file', required=True)
+    parser.add_argument('--xml_path', '-x', type=str, help='path to config xml file', default='../DTP_config.xml')
     parser.add_argument('--simulation', '-s', default=False, action='store_true')
 
     return parser.parse_args()
@@ -33,6 +31,6 @@ if __name__ == "__main__":
     args = parse_args()
     dtp_config = DTPConfig(args.xml_path)
     dtp_api = DTPApi(dtp_config, simulation_mode=args.simulation)
-    # ifc:Class will be removed soon from all B2T graphs, the follow filter will not work once ifc:Class is removed.
-    response = dtp_api.query_all_pages(dtp_api.fetch_element_nodes, "ifc:Class", "IfcWall")
+    # ifc:Class will be removed soon from all B2T graphs
+    response = dtp_api.query_all_pages(dtp_api.fetch_element_nodes, "ifc:Class", "IfcBuildingElementProxy")
     print('Response:\n', response)
