@@ -10,7 +10,13 @@ import multiprocessing
 import os
 from datetime import datetime
 
-from DTP_config import DTPConfig
+try:
+    from DTP_config import DTPConfig
+except ModuleNotFoundError:
+    import sys
+
+    sys.path.insert(0, os.path.dirname(__file__))
+    from DTP_config import DTPConfig
 
 
 def get_element_type(DTP_CONFIG, element):
