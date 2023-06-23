@@ -28,12 +28,18 @@ def get_element_type(DTP_CONFIG, element):
         element type
     """
 
-    found = False
+    # ifc classes and old hasElementType
     for key in DTP_CONFIG.get_object_type_classes():
         if key in element.keys():
             return element[key]
+    
+    # if not found then search for the correctly defined type
+    for edge in element['_outE']:
+        if edge['_label'] == DTP_CONFIG.get_ontology_uri('hasElementType'):
+            return edge['_targetIRI']
 
-    raise Exception("Element is of a type clas not recognized by the system.")
+    raise Exception("Element is of a type class not recognized by the system.")
+
 
 
 def get_timestamp_dtp_format(datedata):
