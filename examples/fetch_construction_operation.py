@@ -22,7 +22,7 @@ def parse_args():
     Get parameters from user
     """
     parser = argparse.ArgumentParser(
-        description='Fetches operation nodes connected to a node identified by constr_node_iri')
+        description='Fetch operation nodes connected to a node identified by constr_node_iri')
     parser.add_argument('--xml_path', '-x', type=str, help='path to config xml file', default='../DTP_config.xml')
     parser.add_argument('--simulation', '-s', default=False, action='store_true')
 
