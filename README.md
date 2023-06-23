@@ -30,14 +30,14 @@ string `Bearer` in the token and path to this file should be given in the `DTP_c
 
 ## Logged information
 
-Currently, the program is using two logs: the general log stored in `DTP_WP3.log`, and the second `db_session_x.log`,
+Currently, the program is using two logs: the general log stored in `global.log`, and the second `db_session_x.log`,
 used or storing information about database changing queries. The second log can be used to revert changes done on the
 database. In order to revert to the last session, it is necessary to call the program with the argument `-r` followed by
 the path to the file. In principle, the database can also be restored from the general log file, but this option has not
-been sufficiently tested. `db_session_x.log` will be stored in log path given with `--log_dir` (can be found in
-examples scripts).
+been sufficiently tested. `db_session_x.log` will be stored in `sessions` folder in log path (`LOG_DIR` in 
+`DTP_config.xml`).
 
-**Note that, the general log file `DTP_WP3.log`, contains also raw HTTP requests, together with the authentication
+**Note that, the general log file `global.log`, contains also raw HTTP requests, together with the authentication
 token. Session is logged only for `create_DTP_API`, `link_DTP_API` and `update_DTP_API`.**
 
 ### Example of the general log file
@@ -168,5 +168,5 @@ python3 fetch_all_activity.py --xml_path ../DTP_config.xml
 Create as-built from as-designed node
 
 ```shell
-python3 asdesigned_to_asbuilt.py --xml_path ../DTP_config.xml -l /path/to/logdir
+python3 asdesigned_to_asbuilt.py --xml_path ../DTP_config.xml
 ```
