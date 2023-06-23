@@ -26,7 +26,6 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Create as-built from as-designed node')
     parser.add_argument('--xml_path', '-x', type=str, help='path to config xml file', default='../DTP_config.xml')
     parser.add_argument('--simulation', '-s', default=False, action='store_true')
-    parser.add_argument('--log_dir', '-l', type=str, help='path to log dir', required=True)
 
     return parser.parse_args()
 
