@@ -507,12 +507,10 @@ class FetchAPI:
                     "$classes": {
                         "$contains": self.DTP_CONFIG.get_ontology_uri('classElement'),
                         "$inheritance": True
-                    }  # ,
-                    # this cannot be included because of the missing info for Mislata site
-                    # self.DTP_CONFIG.get_ontology_uri('isAsDesigned'): False
+                    },
+                    self.DTP_CONFIG.get_ontology_uri('isAsDesigned'): False
                 }
             ],
-            "edge": True,  # TODO: Not sure what 'edge' means in this query
             "return": "AsPerformed"
         })
 
@@ -552,7 +550,6 @@ class FetchAPI:
                     }
                 }
             ],
-            # "edge": True,  # TODO: Not sure what 'edge' means in this query
             "return": "AsPerformed"
         })
 
@@ -617,12 +614,10 @@ class FetchAPI:
                     "$classes": {
                         "$contains": self.DTP_CONFIG.get_ontology_uri('classElement'),
                         "$inheritance": True
-                    }  # ,
-                    # this cannot be included because of the missing info for Mislata site
-                    # self.DTP_CONFIG.get_ontology_uri('isAsDesigned'): False
+                    },
+                    self.DTP_CONFIG.get_ontology_uri('isAsDesigned'): False
                 }
             ],
-            "edge": True,
             "return": "asdesigned"
         })
 
@@ -663,7 +658,6 @@ class FetchAPI:
                     }
                 }
             ],
-            "edge": True,
             "return": "tasks"
         })
 
@@ -704,7 +698,6 @@ class FetchAPI:
                     }
                 }
             ],
-            "edge": True,
             "return": "hasActivity"
         })
 
@@ -745,7 +738,6 @@ class FetchAPI:
                     }
                 }
             ],
-            "edge": True,
             "return": "hasActivity"
         })
 
@@ -786,7 +778,6 @@ class FetchAPI:
                     }
                 }
             ],
-            "edge": True,
             "return": "hasWorkPackage"
         })
 
@@ -827,7 +818,6 @@ class FetchAPI:
                     }
                 }
             ],
-            "edge": True,
             "return": "hasSchedule"
         })
 
@@ -868,7 +858,6 @@ class FetchAPI:
                     }
                 }
             ],
-            "edge": True,
             "return": "hasOperation"
         })
 
@@ -909,7 +898,6 @@ class FetchAPI:
                     }
                 }
             ],
-            "edge": True,
             "return": "hasAction"
         })
 
@@ -951,7 +939,6 @@ class FetchAPI:
                     self.DTP_CONFIG.get_ontology_uri('isAsDesigned'): False
                 }
             ],
-            "edge": True,
             "return": "asbuilt"
         })
 
