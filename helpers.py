@@ -10,7 +10,13 @@ import multiprocessing
 import os
 from datetime import datetime
 
-from DTP_config import DTPConfig
+try:
+    from DTP_config import DTPConfig
+except ModuleNotFoundError:
+    import sys
+
+    sys.path.insert(0, os.path.dirname(__file__))
+    from DTP_config import DTPConfig
 
 
 def get_element_type(DTP_CONFIG, element):
@@ -194,9 +200,9 @@ def create_logger_global(log_dir):
     formatter = logging.Formatter('%(asctime)s : %(levelname)s : %(message)s', datefmt='%d-%b-%y %H:%M:%S')
     return create_logger(log_filename, formatter, logging.DEBUG)
 
-
-try:
+if os.path.exists('../DTP_config.xml'):
     dtp_config = DTPConfig('../DTP_config.xml')
-except FileNotFoundError:
-    dtp_config = DTPConfig('DTP_API/DTP_config.xml')
+elif os.path.exists(os.path.join(os.path.dirname(__file__), 'DTP_config.xml')):
+    dtp_config = DTPConfig(os.path.join(os.path.dirname(__file__), 'DTP_config.xml'))
+    
 globals()['logger_global'] = create_logger_global(dtp_config.get_log_path())
