@@ -63,7 +63,7 @@ class UpdateAPI:
                 return False
         return True
 
-    def update_operation_node(self, oper_node_iri, list_of_action_iri, process_start, process_end, log_path):
+    def update_operation_node(self, oper_node_iri, list_of_action_iri, process_start, process_end):
         """
         The method updates a new operation.
 
@@ -77,8 +77,6 @@ class UpdateAPI:
             Start date of the action
         process_end: str, obligatory
             End date of the action
-        log_path: str, obligatory
-            path to node dump file
 
         Raises
         ------
@@ -91,7 +89,7 @@ class UpdateAPI:
         """
         # creating backup of the node
         node_info = self.fetch_nodes_with_iri(oper_node_iri)
-        dump_path = os.path.join(log_path, f"{oper_node_iri.rsplit('/')[-1]}.json")
+        dump_path = os.path.join(self.node_log_dir, f"{oper_node_iri.rsplit('/')[-1]}.json")
         with open(dump_path, 'w') as fp:
             json.dump(node_info, fp)
 
@@ -133,7 +131,7 @@ class UpdateAPI:
                 return False
         return True
 
-    def update_construction_node(self, constr_iri, list_of_operation_iri, log_path):
+    def update_construction_node(self, constr_iri, list_of_operation_iri):
         """
         The method updates construction node.
 
@@ -143,8 +141,6 @@ class UpdateAPI:
             a valid IRI of a node.
         list_of_operation_iri : list, optional
             list of connection operation iri.
-        log_path: str, obligatory
-            path to node dump file
 
         Raises
         ------
@@ -159,7 +155,7 @@ class UpdateAPI:
         if len(list_of_operation_iri):
             # creating backup of the node
             node_info = self.fetch_nodes_with_iri(constr_iri)
-            dump_path = os.path.join(log_path, f"{constr_iri.rsplit('/')[-1]}.json")
+            dump_path = os.path.join(self.node_log_dir, f"{constr_iri.rsplit('/')[-1]}.json")
             with open(dump_path, 'w') as fp:
                 json.dump(node_info, fp)
 
