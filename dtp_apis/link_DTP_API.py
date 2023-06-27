@@ -144,7 +144,7 @@ class LinkAPI:
         Parameters
         ----------
         node_iri : str, obligatory
-            a valid element IRI of an element
+            a valid IRI of an activity/operation
         task_type_iri : str, obligatory
             a valid task type IRI
 
