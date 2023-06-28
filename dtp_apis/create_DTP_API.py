@@ -5,7 +5,6 @@
 #  This file cannot be used without a written permission from the author(s).
 
 import json
-import secrets
 
 import validators
 
@@ -179,7 +178,7 @@ class CreateAPI:
         return True
 
     def create_kpi_node_defectsperwork(self, kpi_node_iri, task_type, value, ref_quant, sampl_quant, inter_start_date,
-                                    inter_end_date):
+                                       inter_end_date):
 
         if not validators.url(kpi_node_iri):
             raise Exception("Sorry, the IRI is not a valid URL.")
@@ -245,28 +244,30 @@ class CreateAPI:
         if not validators.url(action_node_iri):
             raise Exception("Sorry, the IRI is not a valid URL.")
 
-        payload = json.dumps([
-            {
-                "_classes": [self.DTP_CONFIG.get_ontology_uri('asPerformedAction')],
-                "_domain": self.DTP_CONFIG.get_domain(),
-                "_iri": action_node_iri,
-                "_visibility": 0,
-                self.DTP_CONFIG.get_ontology_uri('hasTaskType'): task_type,
-                self.DTP_CONFIG.get_ontology_uri('processStart'): process_start,
-                self.DTP_CONFIG.get_ontology_uri('processEnd'): process_end,
-                self.DTP_CONFIG.get_ontology_uri('constructionContractor'): contractor,
-                "_outE": [
-                    {
-                        "_label": self.DTP_CONFIG.get_ontology_uri('hasTarget'),
-                        "_targetIRI": target_as_built_iri
-                    },
-                    {
-                        "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
-                        "_targetIRI": task_iri
-                    }
-                ]
-            }
-        ])
+        query_dict = {
+            "_classes": [self.DTP_CONFIG.get_ontology_uri('asPerformedAction')],
+            "_domain": self.DTP_CONFIG.get_domain(),
+            "_iri": action_node_iri,
+            "_visibility": 0,
+            self.DTP_CONFIG.get_ontology_uri('hasTaskType'): task_type,
+            self.DTP_CONFIG.get_ontology_uri('processStart'): process_start,
+            self.DTP_CONFIG.get_ontology_uri('processEnd'): process_end,
+            self.DTP_CONFIG.get_ontology_uri('constructionContractor'): contractor,
+            "_outE": []
+        }
+
+        if target_as_built_iri:
+            query_dict["_outE"].append({
+                "_label": self.DTP_CONFIG.get_ontology_uri('hasTarget'),
+                "_targetIRI": target_as_built_iri
+            })
+        if task_iri:
+            query_dict["_outE"].append({
+                "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
+                "_targetIRI": task_iri
+            })
+
+        payload = json.dumps([query_dict])
 
         response = self.post_guarded_request(payload=payload, url=self.DTP_CONFIG.get_api_url('add_node'))
         if not self.simulation_mode:
@@ -321,8 +322,7 @@ class CreateAPI:
             }
             out_edge_to_actions.append(out_edge_dict)
 
-        payload = json.dumps([
-            {
+        query_dict = {
                 "_domain": self.DTP_CONFIG.get_domain(),
                 "_classes": [self.DTP_CONFIG.get_ontology_uri('asPerformedOperation')],
                 "_iri": oper_node_iri,
@@ -334,14 +334,17 @@ class CreateAPI:
                 #  latest update date
                 self.DTP_CONFIG.get_ontology_uri('processEnd'): process_end,
                 "_outE": [
-                    {
-                        "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
-                        "_targetIRI": target_activity_iri
-                    },
                     *out_edge_to_actions
                 ]
             }
-        ])
+
+        if target_activity_iri:
+            query_dict["_outE"].append({
+                        "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
+                        "_targetIRI": target_activity_iri
+                    })
+
+        payload = json.dumps([query_dict])
 
         response = self.post_guarded_request(payload=payload, url=self.DTP_CONFIG.get_api_url('add_node'))
         if not self.simulation_mode:
@@ -391,22 +394,24 @@ class CreateAPI:
             }
             out_edge_to_operation.append(out_edge_dict)
 
-        payload = json.dumps([
-            {
+        query_dict = {
                 "_classes": [self.DTP_CONFIG.get_ontology_uri('asPerformedConstruction')],
                 "_domain": self.DTP_CONFIG.get_domain(),
                 "_iri": constr_node_iri,
                 "_visibility": 0,
                 self.DTP_CONFIG.get_ontology_uri('hasProductionMethodType'): productionMethodType,
                 "_outE": [
-                    {
-                        "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
-                        "_targetIRI": workpkg_node_iri
-                    },
                     *out_edge_to_operation
                 ]
             }
-        ])
+
+        if workpkg_node_iri:
+            query_dict["_outE"].append({
+                        "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
+                        "_targetIRI": workpkg_node_iri
+                    },)
+
+        payload = json.dumps([query_dict])
 
         response = self.post_guarded_request(payload=payload, url=self.DTP_CONFIG.get_api_url('add_node'))
         if not self.simulation_mode:
