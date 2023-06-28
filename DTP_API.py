@@ -98,7 +98,9 @@ class DTPApi(FetchAPI, CountAPI, CreateAPI, LinkAPI, RevertAPI, SendAPI, UpdateA
                              'update_construction': 'UPDATE_CONSTRUCTION_IRI',
                              'remove_param': 'REMOVED_PARAM_NODE_OPERATION',
                              'add_param': 'ADD_PARAM_NODE_OPERATION',
-                             'link_element_type': 'NEW_LINK_ELEMENT_ELEMENT_TYPE'}
+                             'link_element_type': 'NEW_LINK_ELEMENT_ELEMENT_TYPE',
+                             'link_constr_op': 'NEW_LINK_CONSTR_OPERATION',
+                             'link_op_action': 'NEW_LINK_OPERATION_ACTION'}
 
         try:
             self.log_markers = self.log_markers_node_classes | other_log_markers
@@ -311,6 +313,14 @@ class DTPApi(FetchAPI, CountAPI, CreateAPI, LinkAPI, RevertAPI, SendAPI, UpdateA
                 elif self.log_markers['link_element_type'] in line:
                     node_iri, element_type_iri = get_info_from_log(line, self.log_markers['link_element_type'])
                     self.unlink_element_type(node_iri, element_type_iri)
+                    counter += 1
+                elif self.log_markers['link_constr_op'] in line:
+                    constr_node_iri, list_of_operation_iri = get_info_from_log(line, self.log_markers['link_constr_op'])
+                    self.unlink_constr_op(constr_node_iri, list_of_operation_iri)
+                    counter += 1
+                elif self.log_markers['link_op_action'] in line:
+                    oper_node_iri, list_of_action_iri = get_info_from_log(line, self.log_markers['link_op_action'])
+                    self.unlink_operation_action(oper_node_iri, list_of_action_iri)
                     counter += 1
                 else:
                     try:

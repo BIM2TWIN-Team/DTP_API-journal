@@ -137,7 +137,7 @@ class LinkAPI:
                 return False
         return True
 
-    def link_node_operation_to_action(self, oper_node_iri, action_node_iri):
+    def link_node_operation_to_action(self, oper_node_iri, list_of_action_iri):
         """
         The method links an action with an operation.
 
@@ -145,22 +145,31 @@ class LinkAPI:
         ----------
         oper_node_iri : str, obligatory
             a valid operation IRI
-        action_node_iri : str, obligatory
-            a valid action IRI
+        list_of_action_iri : list, optional
+            list of connection actions iri
 
         Returns
         ------
         bool
-            True if the element has been linked with a defect, and False otherwise
+            True if the operation has been linked with actions, and False otherwise
         """
+        assert len(list_of_action_iri), "No action nodes listed"
+
+        # create out edges list of dictionaries
+        out_edge_to_actions = []
+        for action_iri in list_of_action_iri:
+            out_edge_dict = {
+                "_label": self.DTP_CONFIG.get_ontology_uri('hasAction'),
+                "_targetIRI": action_iri
+            }
+            out_edge_to_actions.append(out_edge_dict)
 
         payload = json.dumps([{
             "_domain": self.DTP_CONFIG.get_domain(),
             "_iri": oper_node_iri,
-            "_outE": [{
-                "_label": self.DTP_CONFIG.get_ontology_uri('hasAction'),
-                "_targetIRI": action_node_iri
-            }]
+            "_outE": [
+                *out_edge_to_actions
+            ]
         }])
 
         response = self.put_guarded_request(payload=payload, url=self.DTP_CONFIG.get_api_url('update_set'))
@@ -168,7 +177,7 @@ class LinkAPI:
             if response.ok:
                 if self.session_logger is not None:
                     self.session_logger.info(
-                        "DTP_API - NEW_LINK_OPERATION_ACTION: " + oper_node_iri + ', ' + action_node_iri)
+                        f"DTP_API - NEW_LINK_OPERATION_ACTION: {oper_node_iri}, {list_of_action_iri}")
                 return True
             else:
                 logger_global.error("Linking nodes failed. Response code: " + str(response.status_code))
@@ -213,30 +222,39 @@ class LinkAPI:
                 return False
         return True
 
-    def link_node_constr_to_operation(self, constr_node_iri, oper_node_iri):
+    def link_node_constr_to_operation(self, constr_node_iri, list_of_operation_iri):
         """
-        The method links a operation with a construction.
+        The method links an operation with a construction.
 
         Parameters
         ----------
         constr_node_iri : str, obligatory
             a valid construction IRI
-        oper_node_iri : str, obligatory
-            a valid operation IRI
+        list_of_operation_iri : list, obligatory
+            list of connected operation iri
 
         Returns
         ------
         bool
-            True if the element has been linked with a defect, and False otherwise
+            True if the construction has been linked with operations, and False otherwise
         """
+        assert len(list_of_operation_iri), "No operation nodes listed"
+
+        # create out edges list of dictionaries
+        out_edge_to_operation = []
+        for operation_iri in list_of_operation_iri:
+            out_edge_dict = {
+                "_label": self.DTP_CONFIG.get_ontology_uri('hasOperation'),
+                "_targetIRI": operation_iri
+            }
+            out_edge_to_operation.append(out_edge_dict)
 
         payload = json.dumps([{
             "_domain": self.DTP_CONFIG.get_domain(),
             "_iri": constr_node_iri,
-            "_outE": [{
-                "_label": self.DTP_CONFIG.get_ontology_uri('hasOperation'),
-                "_targetIRI": oper_node_iri
-            }]
+            "_outE": [
+                *out_edge_to_operation
+            ]
         }])
 
         response = self.put_guarded_request(payload=payload, url=self.DTP_CONFIG.get_api_url('update_set'))
@@ -244,7 +262,7 @@ class LinkAPI:
             if response.ok:
                 if self.session_logger is not None:
                     self.session_logger.info(
-                        "DTP_API - NEW_LINK_CONSTR_OPERATION: " + constr_node_iri + ', ' + oper_node_iri)
+                        f"DTP_API - NEW_LINK_CONSTR_OPERATION: {constr_node_iri}, {list_of_operation_iri}")
                 return True
             else:
                 logger_global.error("Linking nodes failed. Response code: " + str(response.status_code))

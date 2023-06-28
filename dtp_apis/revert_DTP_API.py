@@ -238,6 +238,94 @@ class RevertAPI:
                 return False
         return True
 
+    def unlink_constr_op(self, constr_node_iri, list_of_operation_iri):
+        """
+        Unlink construction and operation node
+
+        Parameters
+        ----------
+        constr_node_iri : str, obligatory
+            a valid construction IRI
+        list_of_operation_iri : list, obligatory
+            list of connected operation iri
+
+        Returns
+        -------
+        bool
+            True if the node is unlinked and False otherwise
+        """
+        # create out edges list of dictionaries
+        out_edge_to_operation = []
+        for operation_iri in list_of_operation_iri:
+            out_edge_dict = {
+                "_label": self.DTP_CONFIG.get_ontology_uri('hasOperation'),
+                "_targetIRI": operation_iri
+            }
+            out_edge_to_operation.append(out_edge_dict)
+
+        payload = json.dumps([{
+            "_domain": self.DTP_CONFIG.get_domain(),
+            "_iri": constr_node_iri,
+            "_outE": [
+                *out_edge_to_operation
+            ]
+        }])
+        response = self.put_guarded_request(payload=payload, url=self.DTP_CONFIG.get_api_url('update_unset'))
+        if not self.simulation_mode:
+            if response.ok:
+                logger_global.info(
+                    f"Removed link {self.DTP_CONFIG.get_ontology_uri('hasOperation')} from {constr_node_iri} "
+                    f"to {list_of_operation_iri}")
+                return True
+            else:
+                logger_global.error("Unlink nodes failed. Response code: " + str(response.status_code))
+                return False
+        return True
+
+    def unlink_operation_action(self, oper_node_iri, list_of_action_iri):
+        """
+        Unlink construction and operation node
+
+        Parameters
+        ----------
+        oper_node_iri : str, obligatory
+            a valid operation IRI
+        list_of_action_iri : list, optional
+            list of connection actions iri
+
+        Returns
+        -------
+        bool
+            True if the node is unlinked and False otherwise
+        """
+        # create out edges list of dictionaries
+        out_edge_to_actions = []
+        for action_iri in list_of_action_iri:
+            out_edge_dict = {
+                "_label": self.DTP_CONFIG.get_ontology_uri('hasAction'),
+                "_targetIRI": action_iri
+            }
+            out_edge_to_actions.append(out_edge_dict)
+
+        payload = json.dumps([{
+            "_domain": self.DTP_CONFIG.get_domain(),
+            "_iri": oper_node_iri,
+            "_outE": [
+                *out_edge_to_actions
+            ]
+        }])
+        response = self.put_guarded_request(payload=payload, url=self.DTP_CONFIG.get_api_url('update_unset'))
+        if not self.simulation_mode:
+            if response.ok:
+                logger_global.info(
+                    f"Removed link {self.DTP_CONFIG.get_ontology_uri('hasOperation')} from {oper_node_iri} "
+                    f"to {list_of_action_iri}")
+                return True
+            else:
+                logger_global.error("Unlink nodes failed. Response code: " + str(response.status_code))
+                return False
+        return True
+
     def delete_asdesigned_param_node(self, node_iri):
         """
         The method removes isAsDesigned field from node identified with node_iri

@@ -93,7 +93,12 @@ def get_info_from_log(line, marker):
     """
     index = line.find(marker)
     ids = line[index + len(marker) + 1:].strip()
-    return [x.strip() for x in ids.split(',')]
+    if '[' in line:
+        str_1, str_2 = ids.split(',', 1)
+        list_str = (str_2.strip().split('[', 1)[1].split(']')[0]).split(',')
+        return [str_1, list_str]
+    else:
+        return [x.strip() for x in ids.split(',')]
 
 
 iri_map = {'ifc': 'asbuilt',
@@ -200,9 +205,10 @@ def create_logger_global(log_dir):
     formatter = logging.Formatter('%(asctime)s : %(levelname)s : %(message)s', datefmt='%d-%b-%y %H:%M:%S')
     return create_logger(log_filename, formatter, logging.DEBUG)
 
+
 if os.path.exists('../DTP_config.xml'):
     dtp_config = DTPConfig('../DTP_config.xml')
 elif os.path.exists(os.path.join(os.path.dirname(__file__), 'DTP_config.xml')):
     dtp_config = DTPConfig(os.path.join(os.path.dirname(__file__), 'DTP_config.xml'))
-    
+
 globals()['logger_global'] = create_logger_global(dtp_config.get_log_path())
