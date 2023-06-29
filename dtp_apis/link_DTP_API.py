@@ -113,7 +113,7 @@ class LinkAPI:
         Returns
         ------
         bool
-            True if the element has been linked with a element type, and False otherwise
+            True if the element has been linked with an element type, and False otherwise
         """
 
         payload = json.dumps([{
