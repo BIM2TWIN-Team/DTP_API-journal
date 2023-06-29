@@ -93,7 +93,12 @@ def get_info_from_log(line, marker):
     """
     index = line.find(marker)
     ids = line[index + len(marker) + 1:].strip()
-    return [x.strip() for x in ids.split(',')]
+    if '[' in line:
+        str_1, str_2 = ids.split(',', 1)
+        list_str = (str_2.strip().split('[', 1)[1].split(']')[0]).split(',')
+        return [str_1, list_str]
+    else:
+        return [x.strip() for x in ids.split(',')]
 
 
 iri_map = {'ifc': 'asbuilt',

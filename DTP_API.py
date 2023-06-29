@@ -99,6 +99,8 @@ class DTPApi(FetchAPI, CountAPI, CreateAPI, LinkAPI, RevertAPI, SendAPI, UpdateA
                              'remove_param': 'REMOVED_PARAM_NODE_OPERATION',
                              'add_param': 'ADD_PARAM_NODE_OPERATION',
                              'link_element_type': 'NEW_LINK_ELEMENT_ELEMENT_TYPE',
+                             'link_constr_op': 'NEW_LINK_CONSTR_OPERATION',
+                             'link_op_action': 'NEW_LINK_OPERATION_ACTION'}
                              'link_task_type': 'NEW_LINK_NODE_TASK_TYPE'}
 
         try:
@@ -316,6 +318,13 @@ class DTPApi(FetchAPI, CountAPI, CreateAPI, LinkAPI, RevertAPI, SendAPI, UpdateA
                     node_iri, element_type_iri = get_info_from_log(line, self.log_markers['link_element_type'])
                     self.unlink_element_type(node_iri, element_type_iri)
                     counter += 1
+                elif self.log_markers['link_constr_op'] in line:
+                    constr_node_iri, list_of_operation_iri = get_info_from_log(line, self.log_markers['link_constr_op'])
+                    self.unlink_constr_op(constr_node_iri, list_of_operation_iri)
+                    counter += 1
+                elif self.log_markers['link_op_action'] in line:
+                    oper_node_iri, list_of_action_iri = get_info_from_log(line, self.log_markers['link_op_action'])
+                    self.unlink_operation_action(oper_node_iri, list_of_action_iri)
                 elif self.log_markers['link_task_type'] in line:
                     node_iri, task_type_iri = get_info_from_log(line, self.log_markers['link_task_type'])
                     self.unlink_task_type(node_iri, task_type_iri)
