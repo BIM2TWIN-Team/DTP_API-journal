@@ -104,6 +104,17 @@
         <URI function="Door" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#Door</URI>
         <URI function="Beam" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#Beam</URI>
         <URI function="Member" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#Member</URI>
+        <URI function="Excavating" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#Excavating</URI>
+        <URI function="InstallingDoor" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#InstallingDoor</URI>
+        <URI function="InstallingPrefabricatedElement" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#InstallingPrefabricatedElement</URI>
+        <URI function="InstallingWindow" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#InstallingWindow</URI>
+        <URI function="LayingBricks" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#LayingBricks</URI>
+        <URI function="Painting" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#Painting</URI>
+        <URI function="PlacingFormwork" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#PlacingFormwork</URI>
+        <URI function="PlacingRebar" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#PlacingRebar</URI>
+        <URI function="Plastering" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#Plastering</URI>
+        <URI function="PouringConcrete" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#PouringConcrete</URI>
+        <URI function="RemovingFormwork" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#RemovingFormwork</URI>
         <URI function="kpiNumberOfDefectsPerWork" type="xs:anyURI">
             https://www.bim2twin.eu/ontology/kpi/NumberOfDefectsPerWork
         </URI>

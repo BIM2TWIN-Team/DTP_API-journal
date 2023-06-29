@@ -249,7 +249,6 @@ class CreateAPI:
             "_domain": self.DTP_CONFIG.get_domain(),
             "_iri": action_node_iri,
             "_visibility": 0,
-            self.DTP_CONFIG.get_ontology_uri('hasTaskType'): task_type,
             self.DTP_CONFIG.get_ontology_uri('processStart'): process_start,
             self.DTP_CONFIG.get_ontology_uri('processEnd'): process_end,
             self.DTP_CONFIG.get_ontology_uri('constructionContractor'): contractor,
@@ -267,6 +266,12 @@ class CreateAPI:
                 "_targetIRI": task_iri
             })
 
+        if task_type:
+            query_dict["_outE"].append({
+                "_label": self.DTP_CONFIG.get_ontology_uri('hasTaskType'),
+                "_targetIRI": task_type
+            })
+
         payload = json.dumps([query_dict])
 
         response = self.post_guarded_request(payload=payload, url=self.DTP_CONFIG.get_api_url('add_node'))
@@ -280,14 +285,14 @@ class CreateAPI:
                 return False
         return True
 
-    def create_operation_node(self, taskType, oper_node_iri, target_activity_iri, list_of_action_iri, process_start,
+    def create_operation_node(self, task_type, oper_node_iri, target_activity_iri, list_of_action_iri, process_start,
                               process_end):
         """
         The method creates a new operation.
 
         Parameters
         ----------
-        taskType : str, obligatory
+        task_type : str, obligatory
             a valid task type from activity node.
         oper_node_iri : str, obligatory
             a valid IRI of a node.
@@ -327,7 +332,6 @@ class CreateAPI:
                 "_classes": [self.DTP_CONFIG.get_ontology_uri('asPerformedOperation')],
                 "_iri": oper_node_iri,
                 "_visibility": 0,
-                self.DTP_CONFIG.get_ontology_uri('hasTaskType'): taskType,
                 self.DTP_CONFIG.get_ontology_uri('processStart'): process_start,
                 # TODO: update processEnd and add latest date to updateDate.
                 #  processEnd should be only filled when all action under it is complete. For now, processEnd stores
@@ -343,6 +347,13 @@ class CreateAPI:
                         "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
                         "_targetIRI": target_activity_iri
                     })
+
+        if task_type:
+            query_dict["_outE"].append({
+                "_label": self.DTP_CONFIG.get_ontology_uri('hasTaskType'),
+                "_targetIRI": task_type
+            })
+
 
         payload = json.dumps([query_dict])
 
