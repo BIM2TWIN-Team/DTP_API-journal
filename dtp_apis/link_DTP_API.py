@@ -113,7 +113,7 @@ class LinkAPI:
         Returns
         ------
         bool
-            True if the element has been linked with a element type, and False otherwise
+            True if the element has been linked with an element type, and False otherwise
         """
 
         payload = json.dumps([{
@@ -131,6 +131,44 @@ class LinkAPI:
                 if self.session_logger is not None:
                     self.session_logger.info(
                         f"DTP_API - NEW_LINK_ELEMENT_ELEMENT_TYPE: {element_node_iri}, {element_type_iri}")
+                return True
+            else:
+                logger_global.error("Linking nodes failed. Response code: " + str(response.status_code))
+                return False
+        return True
+
+    def link_node_to_task_type(self, node_iri, task_type_iri):
+        """
+        The method links a node to task type
+
+        Parameters
+        ----------
+        node_iri : str, obligatory
+            a valid IRI of an activity/operation
+        task_type_iri : str, obligatory
+            a valid task type IRI
+
+        Returns
+        ------
+        bool
+            True if the node has been linked with a task type, and False otherwise
+        """
+
+        payload = json.dumps([{
+            "_domain": self.DTP_CONFIG.get_domain(),
+            "_iri": node_iri,
+            "_outE": [{
+                "_label": self.DTP_CONFIG.get_ontology_uri('hasTaskType'),
+                "_targetIRI": task_type_iri
+            }]
+        }])
+
+        response = self.put_guarded_request(payload=payload, url=self.DTP_CONFIG.get_api_url('update_set'))
+        if not self.simulation_mode:
+            if response.ok:
+                if self.session_logger is not None:
+                    self.session_logger.info(
+                        f"DTP_API - NEW_LINK_NODE_TASK_TYPE: {node_iri}, {task_type_iri}")
                 return True
             else:
                 logger_global.error("Linking nodes failed. Response code: " + str(response.status_code))
