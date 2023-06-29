@@ -200,9 +200,12 @@ def create_logger_global(log_dir):
     formatter = logging.Formatter('%(asctime)s : %(levelname)s : %(message)s', datefmt='%d-%b-%y %H:%M:%S')
     return create_logger(log_filename, formatter, logging.DEBUG)
 
+
 if os.path.exists('../DTP_config.xml'):
     dtp_config = DTPConfig('../DTP_config.xml')
 elif os.path.exists(os.path.join(os.path.dirname(__file__), 'DTP_config.xml')):
     dtp_config = DTPConfig(os.path.join(os.path.dirname(__file__), 'DTP_config.xml'))
-    
+else:
+    raise Exception("DTP_config.xml not found!")
+
 globals()['logger_global'] = create_logger_global(dtp_config.get_log_path())
