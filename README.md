@@ -170,3 +170,9 @@ Create as-built from as-designed node
 ```shell
 python3 asdesigned_to_asbuilt.py --xml_path ../DTP_config.xml
 ```
+
+Revert a session with log file
+
+```shell
+python3 revert_session.py --xml_path ../DTP_config.xml --revert /path/to/sessions/db_session-dd-tt.log
+```
