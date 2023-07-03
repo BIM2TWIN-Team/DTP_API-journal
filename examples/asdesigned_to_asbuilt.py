@@ -36,7 +36,8 @@ if __name__ == "__main__":
     dtp_config = DTPConfig(args.xml_path)
     dtp_api = DTPApi(dtp_config, simulation_mode=args.simulation)
 
-    elements = dtp_api.query_all_pages(dtp_api.fetch_asdesigned_nodes, "ifc:Class", "IfcWall")
+    elements = dtp_api.query_all_pages(dtp_api.fetch_nodes_with_element_type, dtp_config.get_ontology_uri('Wall'),
+                                       "asbuilt")
 
     for element in elements['items']:
         asbuild_iri = helpers.create_as_performed_iri(element['_iri'])
