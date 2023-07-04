@@ -122,10 +122,10 @@ def create_as_performed_iri(as_planned_iri):
         Returns as-performed iri
     """
     base_uri, as_planned_node_id = as_planned_iri.rsplit('/', 1)
-    asperf_substr = [k for k in iri_map.keys() if k in as_planned_node_id]
-    if len(asperf_substr) == 1:
-        as_perf_node_id = as_planned_node_id.replace(asperf_substr[0], iri_map[asperf_substr[0]])
-        return os.path.join(base_uri, as_perf_node_id)
+    asplanned_substr = [k for k in iri_map.keys() if k in as_planned_node_id]
+    if len(asplanned_substr) == 1:
+        as_perf_node_id = as_planned_node_id.replace(asplanned_substr[0], iri_map[asplanned_substr[0]])
+        return f"{base_uri}/{as_perf_node_id}"
     else:
         raise Exception(f"{as_planned_iri} cannot be converted to as-performed iri")
 
