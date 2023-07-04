@@ -66,6 +66,7 @@
         <URI function="hasTaskType" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#hasTaskType</URI>
         <URI function="processStart" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#processStart</URI>
         <URI function="processEnd" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#processEnd</URI>
+        <URI function="lastUpdatedOn" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#lastUpdatedOn</URI>
         <URI function="asPerformedAction" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#Action</URI>
         <URI function="constructionContractor" type="xs:anyURI">
             https://www.bim2twin.eu/ontology/Core#constructionContractor

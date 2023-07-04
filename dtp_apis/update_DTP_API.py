@@ -63,7 +63,7 @@ class UpdateAPI:
                 return False
         return True
 
-    def update_operation_node(self, oper_node_iri, list_of_action_iri, process_start, process_end):
+    def update_operation_node(self, oper_node_iri, list_of_action_iri, process_start, last_updated, process_end):
         """
         The method updates a new operation.
 
@@ -74,9 +74,11 @@ class UpdateAPI:
         list_of_action_iri : list, optional
             list of connection actions iri.
         process_start: str, obligatory
-            Start date of the action
+            Start date of the operation
+        last_updated: str, obligatory
+            Last updated date
         process_end: str, obligatory
-            End date of the action
+            End date of the operation
 
         Raises
         ------
@@ -93,6 +95,7 @@ class UpdateAPI:
         with open(dump_path, 'w') as fp:
             json.dump(node_info, fp)
 
+        out_edge_to_actions = []
         if list_of_action_iri:
             # collecting already existing edges
             already_existing_edges = node_info['items'][0]['_outE']
@@ -105,20 +108,18 @@ class UpdateAPI:
                 }
                 out_edge_to_actions.append(out_edge_dict)
 
-            payload = json.dumps([{
-                "_domain": self.DTP_CONFIG.get_domain(),
-                "_iri": oper_node_iri,
-                self.DTP_CONFIG.get_ontology_uri('processStart'): process_start,
-                self.DTP_CONFIG.get_ontology_uri('processEnd'): process_end,
-                "_outE": out_edge_to_actions
-            }])
-        else:
-            payload = json.dumps([{
-                "_domain": self.DTP_CONFIG.get_domain(),
-                "_iri": oper_node_iri,
-                self.DTP_CONFIG.get_ontology_uri('processStart'): process_start,
-                self.DTP_CONFIG.get_ontology_uri('processEnd'): process_end
-            }])
+        query_dict = {
+            "_domain": self.DTP_CONFIG.get_domain(),
+            "_iri": oper_node_iri,
+            self.DTP_CONFIG.get_ontology_uri('processStart'): process_start,
+            self.DTP_CONFIG.get_ontology_uri('lastUpdatedOn'): last_updated,
+            "_outE": out_edge_to_actions
+        }
+
+        if process_end:
+            query_dict[self.DTP_CONFIG.get_ontology_uri('processEnd')] = process_end
+
+        payload = json.dumps([query_dict])
 
         response = self.put_guarded_request(payload=payload, url=self.DTP_CONFIG.get_api_url('update_set'))
         if not self.simulation_mode:

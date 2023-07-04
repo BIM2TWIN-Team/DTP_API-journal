@@ -286,7 +286,7 @@ class CreateAPI:
         return True
 
     def create_operation_node(self, task_type, oper_node_iri, target_activity_iri, list_of_action_iri, process_start,
-                              process_end):
+                              last_updated, process_end):
         """
         The method creates a new operation.
 
@@ -301,9 +301,11 @@ class CreateAPI:
         list_of_action_iri : list, optional
             list of connection actions iri.
         process_start: str, obligatory
-            Start date of the action
+            Start date of the operation
+        last_updated: str, obligatory
+            Last updated date
         process_end: str, obligatory
-            End date of the action
+            End date of the operation
 
         Raises
         ------
@@ -328,32 +330,31 @@ class CreateAPI:
             out_edge_to_actions.append(out_edge_dict)
 
         query_dict = {
-                "_domain": self.DTP_CONFIG.get_domain(),
-                "_classes": [self.DTP_CONFIG.get_ontology_uri('asPerformedOperation')],
-                "_iri": oper_node_iri,
-                "_visibility": 0,
-                self.DTP_CONFIG.get_ontology_uri('processStart'): process_start,
-                # TODO: update processEnd and add latest date to updateDate.
-                #  processEnd should be only filled when all action under it is complete. For now, processEnd stores
-                #  latest update date
-                self.DTP_CONFIG.get_ontology_uri('processEnd'): process_end,
-                "_outE": [
-                    *out_edge_to_actions
-                ]
-            }
+            "_domain": self.DTP_CONFIG.get_domain(),
+            "_classes": [self.DTP_CONFIG.get_ontology_uri('asPerformedOperation')],
+            "_iri": oper_node_iri,
+            "_visibility": 0,
+            self.DTP_CONFIG.get_ontology_uri('processStart'): process_start,
+            self.DTP_CONFIG.get_ontology_uri('lastUpdatedOn'): last_updated,
+            "_outE": [
+                *out_edge_to_actions
+            ]
+        }
+
+        if process_end:
+            query_dict[self.DTP_CONFIG.get_ontology_uri('processEnd')] = process_end
 
         if target_activity_iri:
             query_dict["_outE"].append({
-                        "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
-                        "_targetIRI": target_activity_iri
-                    })
+                "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
+                "_targetIRI": target_activity_iri
+            })
 
         if task_type:
             query_dict["_outE"].append({
                 "_label": self.DTP_CONFIG.get_ontology_uri('hasTaskType'),
                 "_targetIRI": task_type
             })
-
 
         payload = json.dumps([query_dict])
 
@@ -406,21 +407,21 @@ class CreateAPI:
             out_edge_to_operation.append(out_edge_dict)
 
         query_dict = {
-                "_classes": [self.DTP_CONFIG.get_ontology_uri('asPerformedConstruction')],
-                "_domain": self.DTP_CONFIG.get_domain(),
-                "_iri": constr_node_iri,
-                "_visibility": 0,
-                self.DTP_CONFIG.get_ontology_uri('hasProductionMethodType'): productionMethodType,
-                "_outE": [
-                    *out_edge_to_operation
-                ]
-            }
+            "_classes": [self.DTP_CONFIG.get_ontology_uri('asPerformedConstruction')],
+            "_domain": self.DTP_CONFIG.get_domain(),
+            "_iri": constr_node_iri,
+            "_visibility": 0,
+            self.DTP_CONFIG.get_ontology_uri('hasProductionMethodType'): productionMethodType,
+            "_outE": [
+                *out_edge_to_operation
+            ]
+        }
 
         if workpkg_node_iri:
             query_dict["_outE"].append({
-                        "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
-                        "_targetIRI": workpkg_node_iri
-                    },)
+                "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
+                "_targetIRI": workpkg_node_iri
+            }, )
 
         payload = json.dumps([query_dict])
 
