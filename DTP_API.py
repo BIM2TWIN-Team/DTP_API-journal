@@ -100,7 +100,7 @@ class DTPApi(FetchAPI, CountAPI, CreateAPI, LinkAPI, RevertAPI, SendAPI, UpdateA
                              'add_param': 'ADD_PARAM_NODE_OPERATION',
                              'link_element_type': 'NEW_LINK_ELEMENT_ELEMENT_TYPE',
                              'link_constr_op': 'NEW_LINK_CONSTR_OPERATION',
-                             'link_op_action': 'NEW_LINK_OPERATION_ACTION'}
+                             'link_op_action': 'NEW_LINK_OPERATION_ACTION',
                              'link_task_type': 'NEW_LINK_NODE_TASK_TYPE'}
 
         try:
