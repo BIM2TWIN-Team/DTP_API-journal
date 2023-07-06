@@ -139,7 +139,7 @@ class FetchAPI:
         payload = json.dumps({
             "query": {
                 "$domain": self.DTP_CONFIG.get_domain(),
-                "iri": node_iri
+                "$iri": node_iri
             }
         })
 
