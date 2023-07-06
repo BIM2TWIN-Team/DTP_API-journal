@@ -176,3 +176,9 @@ Revert a session with log file
 ```shell
 python3 revert_session.py --xml_path ../DTP_config.xml --revert /path/to/sessions/db_session-dd-tt.log
 ```
+
+Delete node
+
+```shell
+python3 delete_node.py --xml_path ../DTP_config.xml
+```
