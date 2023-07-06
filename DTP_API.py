@@ -284,7 +284,7 @@ class DTPApi(FetchAPI, CountAPI, CreateAPI, LinkAPI, RevertAPI, SendAPI, UpdateA
         sorted_log_files = sorted(log_files, reverse=True)  # newest to oldest
         for log_file in sorted_log_files:
             print(f"Reverting {log_file}")
-            self.revert_last_session(f"{session_path}/{log_file}")
+            self.revert_last_session(os.path.join(session_path, log_file))
             print(f"Session reverted.")
 
     def revert_last_session(self, session_file):

@@ -176,3 +176,9 @@ Revert a session with log file
 ```shell
 python3 revert_session.py --xml_path ../DTP_config.xml --revert /path/to/sessions/db_session-dd-tt.log
 ```
+
+Revert multiple sessions (please note that all session files should be in one folder)
+
+```shell
+python3 revert_session.py --xml_path ../DTP_config.xml --revert_dir /path/to/sessions/dir
+```
