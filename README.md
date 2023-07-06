@@ -159,6 +159,12 @@ Fetch operation nodes connected to a node identified by `constr_node_iri`
 python3 fetch_construction_operation.py --xml_path ../DTP_config.xml
 ```
 
+Fetch single node with its iri
+
+```shell
+python3 fetch_singl_node.py --xml_path ../DTP_config.xml
+```
+
 Fetch all activity node in the graph
 
 ```shell
