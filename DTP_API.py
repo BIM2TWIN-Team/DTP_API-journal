@@ -270,6 +270,23 @@ class DTPApi(FetchAPI, CountAPI, CreateAPI, LinkAPI, RevertAPI, SendAPI, UpdateA
 
         return request_str
 
+    def revert_sessions(self, session_path):
+        """
+        Revert multiple session in a directory
+
+        Parameters
+        ----------
+        session_path: str
+            path to the session directory
+        """
+        assert os.path.isdir(session_path), f"{session_path} is not a directory"
+        log_files = [f for f in os.listdir(session_path) if f.endswith('.log')]
+        sorted_log_files = sorted(log_files, reverse=True)  # newest to oldest
+        for log_file in sorted_log_files:
+            print(f"Reverting {log_file}")
+            self.revert_last_session(os.path.join(session_path, log_file))
+            print(f"Session reverted.")
+
     def revert_last_session(self, session_file):
         """
         The method can revert the last non-empty sessions.
