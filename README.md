@@ -160,6 +160,12 @@ Fetch operation nodes connected to a node identified by `constr_node_iri`
 python3 fetch_construction_operation.py --xml_path ../DTP_config.xml
 ```
 
+Fetch single node with its iri
+
+```shell
+python3 fetch_singl_node.py --xml_path ../DTP_config.xml
+```
+
 Fetch all activity node in the graph
 
 ```shell
@@ -176,6 +182,12 @@ Revert a session with log file
 
 ```shell
 python3 revert_session.py --xml_path ../DTP_config.xml --revert /path/to/sessions/db_session-dd-tt.log
+```
+
+Delete node
+
+```shell
+python3 delete_node.py --xml_path ../DTP_config.xml
 ```
 
 Revert multiple sessions (please note that all session files should be in one folder)
