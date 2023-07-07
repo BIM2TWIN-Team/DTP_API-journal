@@ -110,7 +110,7 @@ class DTPApi(FetchAPI, CountAPI, CreateAPI, LinkAPI, RevertAPI, SendAPI, UpdateA
 
         # initialise session logger
         session_log_dir = os.path.join(self.DTP_CONFIG.get_log_path(), "sessions")
-        self.node_log_dir = os.path.join(self.DTP_CONFIG.get_log_path(), "nodes")
+        self.node_log_dir = os.path.join(self.DTP_CONFIG.get_log_path(), f"nodes-{time.strftime('%Y%m%d-%H%M%S')}")
         if not os.path.exists(session_log_dir):
             os.makedirs(session_log_dir)
         if not os.path.exists(self.node_log_dir):
@@ -281,7 +281,7 @@ class DTPApi(FetchAPI, CountAPI, CreateAPI, LinkAPI, RevertAPI, SendAPI, UpdateA
         """
         assert os.path.isdir(session_path), f"{session_path} is not a directory"
         log_files = [f for f in os.listdir(session_path) if f.endswith('.log')]
-        sorted_log_files = sorted(log_files, reverse=True)  # newest to oldest
+        sorted_log_files = sorted(log_files, reverse=False)  # newest to oldest
         for log_file in sorted_log_files:
             print(f"Reverting {log_file}")
             self.revert_last_session(os.path.join(session_path, log_file))
@@ -368,7 +368,7 @@ class DTPApi(FetchAPI, CountAPI, CreateAPI, LinkAPI, RevertAPI, SendAPI, UpdateA
                     self.delete_node_from_graph(node_uuid)
                     counter = counter + 1
 
-        logger_global.info('The session started at: ' + msg_date + ', has been reverted.')
+                logger_global.info('The session started at: ' + msg_date + ', has been reverted.')
 
     def query_all_pages(self, fetch_function, *fetch_function_arg):
         """

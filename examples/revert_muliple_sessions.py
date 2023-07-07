@@ -32,5 +32,5 @@ if __name__ == "__main__":
     dtp_config = DTPConfig(args.xml_path)
     dtp_api = DTPApi(dtp_config)
     print(f'Reverting session from dir {args.revert_dir}')
-    dtp_api.revert_sessions(args.revert)
+    dtp_api.revert_sessions(args.revert_dir)
     print(f'All session reverted.')

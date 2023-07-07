@@ -8,6 +8,7 @@ import logging
 import logging.config
 import multiprocessing
 import os
+import time
 from datetime import datetime
 
 try:
@@ -203,7 +204,7 @@ def create_logger_global(log_dir):
     -------
         logger object
     """
-    log_filename = os.path.join(log_dir, 'global.log')
+    log_filename = os.path.join(log_dir, f"global-{time.strftime('%Y%m%d-%H%M%S')}.log")
     formatter = logging.Formatter('%(asctime)s : %(levelname)s : %(message)s', datefmt='%d-%b-%y %H:%M:%S')
     return create_logger(log_filename, formatter, logging.DEBUG)
 
