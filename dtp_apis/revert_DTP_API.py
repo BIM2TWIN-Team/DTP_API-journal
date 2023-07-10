@@ -46,7 +46,7 @@ class RevertAPI:
             True if an element has been deleted and False otherwise
         """
         # creating backup of the node
-        node_info = self.fetch_node_with_iri(node_uuid)
+        node_info = self.fetch_node_with_uuid(node_uuid)
         dump_path = os.path.join(self.node_log_dir, f"{node_uuid.rsplit('/')[-1]}.json")
         with open(dump_path, 'w') as fp:
             json.dump(node_info, fp)
