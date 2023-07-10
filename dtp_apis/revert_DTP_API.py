@@ -105,8 +105,8 @@ class RevertAPI:
 
         payload = json.dumps({
             "query": {
-                "_domain": self.DTP_CONFIG.get_domain(),
-                "_iri": node_iri
+                "$domain": self.DTP_CONFIG.get_domain(),
+                "$iri": node_iri
             }
         })
 
