@@ -249,11 +249,17 @@ class CreateAPI:
             "_domain": self.DTP_CONFIG.get_domain(),
             "_iri": action_node_iri,
             "_visibility": 0,
-            self.DTP_CONFIG.get_ontology_uri('processStart'): process_start,
-            self.DTP_CONFIG.get_ontology_uri('processEnd'): process_end,
-            self.DTP_CONFIG.get_ontology_uri('constructionContractor'): contractor,
             "_outE": []
         }
+
+        if contractor:
+            query_dict[self.DTP_CONFIG.get_ontology_uri('constructionContractor')] = contractor
+
+        if process_start:
+            query_dict[self.DTP_CONFIG.get_ontology_uri('processStart')] = process_start
+
+        if process_end:
+            query_dict[self.DTP_CONFIG.get_ontology_uri('processEnd')] = process_end
 
         if target_as_built_iri:
             query_dict["_outE"].append({
@@ -334,12 +340,16 @@ class CreateAPI:
             "_classes": [self.DTP_CONFIG.get_ontology_uri('asPerformedOperation')],
             "_iri": oper_node_iri,
             "_visibility": 0,
-            self.DTP_CONFIG.get_ontology_uri('processStart'): process_start,
-            self.DTP_CONFIG.get_ontology_uri('lastUpdatedOn'): last_updated,
             "_outE": [
                 *out_edge_to_actions
             ]
         }
+
+        if process_start:
+            query_dict[self.DTP_CONFIG.get_ontology_uri('processStart')] = process_start
+
+        if last_updated:
+            query_dict[self.DTP_CONFIG.get_ontology_uri('lastUpdatedOn')] = last_updated
 
         if process_end:
             query_dict[self.DTP_CONFIG.get_ontology_uri('processEnd')] = process_end
@@ -411,17 +421,22 @@ class CreateAPI:
             "_domain": self.DTP_CONFIG.get_domain(),
             "_iri": constr_node_iri,
             "_visibility": 0,
-            self.DTP_CONFIG.get_ontology_uri('hasProductionMethodType'): productionMethodType,
             "_outE": [
                 *out_edge_to_operation
             ]
         }
 
+        if productionMethodType:
+            query_dict["_outE"].append({
+                "_label": self.DTP_CONFIG.get_ontology_uri('hasProductionMethodType'),
+                "_targetIRI": productionMethodType
+            })
+
         if workpkg_node_iri:
             query_dict["_outE"].append({
                 "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
                 "_targetIRI": workpkg_node_iri
-            }, )
+            })
 
         payload = json.dumps([query_dict])
 
