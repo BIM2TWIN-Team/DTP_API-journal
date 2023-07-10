@@ -121,6 +121,31 @@ class FetchAPI:
         else:
             return str(uuid.uuid4())
 
+    def fetch_node_with_uuid(self, node_uuid):
+        """
+        The method queries nodes with given uuid
+
+        Parameters
+        ----------
+        node_uuid : str, optional
+            uuid of the node
+
+        Returns
+        ------
+        dictionary
+            JSON mapped to a dictionary. The data contain the node.
+        """
+
+        payload = json.dumps({
+            "query": {
+                "$domain": self.DTP_CONFIG.get_domain(),
+                "$uuid": node_uuid
+            }
+        })
+
+        req_url = self.DTP_CONFIG.get_api_url('get_find_elements')
+        return self.post_general_request(payload, req_url).json()
+
     def fetch_node_with_iri(self, node_iri):
         """
         The method queries nodes with given iri
@@ -128,12 +153,12 @@ class FetchAPI:
         Parameters
         ----------
         node_iri : str, optional
-            used to fetch a next page
+            iri of the node
 
         Returns
         ------
         dictionary
-            JSON mapped to a dictionary. The data contain nodes of the type element.
+            JSON mapped to a dictionary. The data contain the node.
         """
 
         payload = json.dumps({

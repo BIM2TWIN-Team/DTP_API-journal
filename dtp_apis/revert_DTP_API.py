@@ -45,6 +45,11 @@ class RevertAPI:
         bool
             True if an element has been deleted and False otherwise
         """
+        # creating backup of the node
+        node_info = self.fetch_node_with_uuid(node_uuid)
+        dump_path = os.path.join(self.node_log_dir, f"{node_uuid.rsplit('/')[-1]}.json")
+        with open(dump_path, 'w') as fp:
+            json.dump(node_info, fp)
 
         payload = ""
         headers = {
@@ -66,6 +71,8 @@ class RevertAPI:
 
             if response.ok:
                 logger_global.info("The node: " + node_uuid + ", has been deleted.")
+                if self.session_logger is not None:
+                    self.session_logger.info(f"DTP_API - DELETE_NODE_UUID: {node_uuid}, {dump_path}")
                 return True
             else:
                 logger_global.error(
@@ -96,12 +103,12 @@ class RevertAPI:
         if not validators.url(node_iri):
             raise Exception("Sorry, the target IRI is not a valid URL.")
 
-        payload = json.dumps(
-            {
+        payload = json.dumps({
+            "query": {
                 "_domain": self.DTP_CONFIG.get_domain(),
                 "_iri": node_iri
             }
-        )
+        })
 
         response = self.post_guarded_request(payload=payload, url=self.DTP_CONFIG.get_api_url('delete_avatar_iri'))
         if not self.simulation_mode:
