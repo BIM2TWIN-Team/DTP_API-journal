@@ -637,6 +637,33 @@ class FetchAPI:
         req_url = self.DTP_CONFIG.get_api_url('get_find_elements') if not url else url
         return self.post_general_request(payload, req_url).json()
 
+    def fetch_op_nodes(self, url=None):
+        """
+        The method queries operation nodes from the platform.
+
+        Parameters
+        ----------
+        url : str, optional
+            used to fetch a next page
+
+        Returns
+        ------
+        dictionary
+            JSON mapped to a dictionary. The data contain operation nodes.
+        """
+
+        payload = json.dumps({
+            "query": {
+                "$domain": self.DTP_CONFIG.get_domain(),
+                "$classes": {
+                    "$contains": self.DTP_CONFIG.get_ontology_uri('asPerformedOperation')
+                }
+            }
+        })
+
+        req_url = self.DTP_CONFIG.get_api_url('get_find_elements') if not url else url
+        return self.post_general_request(payload, req_url).json()
+
     def fetch_asbuilt_connected_asdesigned_nodes(self, asbuilt_node_iri, url=None):
         """
         The method fetches as-designed nodes connected to a node identified by node_iri
