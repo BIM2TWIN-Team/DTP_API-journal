@@ -72,7 +72,7 @@ class RevertAPI:
             if response.ok:
                 logger_global.info("The node: " + node_uuid + ", has been deleted.")
                 if self.session_logger is not None:
-                    self.session_logger.info(f"DTP_API - DELETE_NODE_IRI: {node_uuid}, {dump_path}")
+                    self.session_logger.info(f"DTP_API - DELETE_NODE_UUID: {node_uuid}, {dump_path}")
                 return True
             else:
                 logger_global.error(
