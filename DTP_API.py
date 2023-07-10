@@ -94,6 +94,7 @@ class DTPApi(FetchAPI, CountAPI, CreateAPI, LinkAPI, RevertAPI, SendAPI, UpdateA
         other_log_markers = {'link_elem_blob': 'NEW_LINK_ELEMENT_BLOB',
                              'new_blob': 'NEW_BLOB',
                              'update_asdesigned_param': 'UPDATE_isAsDesigned_PARAM_NODE_OPERATION',
+                             'update_action': 'UPDATE_ACTION_IRI',
                              'update_operation': 'UPDATE_OPERATION_IRI',
                              'update_construction': 'UPDATE_CONSTRUCTION_IRI',
                              'remove_param': 'REMOVED_PARAM_NODE_OPERATION',
@@ -315,6 +316,9 @@ class DTPApi(FetchAPI, CountAPI, CreateAPI, LinkAPI, RevertAPI, SendAPI, UpdateA
                     element_iri = get_info_from_log(line, self.log_markers['update_asdesigned_param'])[0]
                     self.delete_asdesigned_param_node(element_iri)
                     counter += 1
+                elif self.log_markers['update_action'] in line:
+                    node_iri, dump_path = get_info_from_log(line, self.log_markers['update_action'])
+                    self.revert_node_update(node_iri, dump_path)
                 elif self.log_markers['update_operation'] in line:
                     node_iri, dump_path = get_info_from_log(line, self.log_markers['update_operation'])
                     self.revert_node_update(node_iri, dump_path)

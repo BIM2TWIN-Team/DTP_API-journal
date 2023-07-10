@@ -63,14 +63,108 @@ class UpdateAPI:
                 return False
         return True
 
-    def update_operation_node(self, oper_node_iri, list_of_action_iri, process_start, last_updated, process_end):
+    def update_action_node(self, task_type, action_node_iri, task_iri, target_as_built_iri, contractor,
+                           process_start, process_end):
         """
         The method updates a new operation.
 
         Parameters
         ----------
+        task_type : str, obligatory
+            a valid task type.
+        action_node_iri: str, obligatory
+            a valid action IRI of a node.
+        task_iri:
+            a valid task IRI.
+        target_as_built_iri: str, obligatory
+            a valid iri of the as-built targets of action
+        contractor: str, obligatory
+            contractor from as-planned
+        process_start: str, obligatory
+            Start date of the action
+        process_end: str, obligatory
+            End date of the action
+
+        Raises
+        ------
+        It can raise an exception if the request has not been successful.
+
+        Returns
+        ------
+        bool
+            return True if operation node has been updated and False otherwise.
+        """
+        # creating backup of the node
+        node_info = self.fetch_node_with_iri(action_node_iri)
+        dump_path = os.path.join(self.node_log_dir, f"{action_node_iri.rsplit('/')[-1]}.json")
+        with open(dump_path, 'w') as fp:
+            json.dump(node_info, fp)
+
+        out_edge_dict = {}
+        if target_as_built_iri:
+            out_edge_dict = {
+                "_label": self.DTP_CONFIG.get_ontology_uri('hasAction'),
+                "_targetIRI": target_as_built_iri
+            }
+
+        query_dict = {
+            "_domain": self.DTP_CONFIG.get_domain(),
+            "_iri": action_node_iri,
+            "_outE": out_edge_dict
+        }
+
+        if contractor:
+            query_dict[self.DTP_CONFIG.get_ontology_uri('constructionContractor')] = contractor
+
+        if target_as_built_iri:
+            query_dict["_outE"].append({
+                "_label": self.DTP_CONFIG.get_ontology_uri('hasTarget'),
+                "_targetIRI": target_as_built_iri
+            })
+        if task_iri:
+            query_dict["_outE"].append({
+                "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
+                "_targetIRI": task_iri
+            })
+
+        if task_type:
+            query_dict["_outE"].append({
+                "_label": self.DTP_CONFIG.get_ontology_uri('hasTaskType'),
+                "_targetIRI": task_type
+            })
+
+        if process_start:
+            query_dict[self.DTP_CONFIG.get_ontology_uri('processStart')] = process_start
+
+        if process_end:
+            query_dict[self.DTP_CONFIG.get_ontology_uri('processEnd')] = process_end
+
+        payload = json.dumps([query_dict])
+
+        response = self.put_guarded_request(payload=payload, url=self.DTP_CONFIG.get_api_url('update_set'))
+        if not self.simulation_mode:
+            if response.ok:
+                if self.session_logger is not None:
+                    self.session_logger.info(f"DTP_API - UPDATE_ACTION_IRI: {action_node_iri}, {dump_path}")
+                return True
+            else:
+                logger_global.error("Updating action node failed. Response code: " + str(response.status_code))
+                return False
+        return True
+
+    def update_operation_node(self, task_type, oper_node_iri, target_activity_iri, list_of_action_iri, process_start,
+                              last_updated, process_end):
+        """
+        The method updates a new operation.
+
+        Parameters
+        ----------
+        task_type : str, obligatory
+            a valid task type from activity node.
         oper_node_iri : str, obligatory
             a valid IRI of a node.
+        target_activity_iri : str, obligatory
+            a valid activity.
         list_of_action_iri : list, optional
             list of connection actions iri.
         process_start: str, obligatory
@@ -111,13 +205,29 @@ class UpdateAPI:
         query_dict = {
             "_domain": self.DTP_CONFIG.get_domain(),
             "_iri": oper_node_iri,
-            self.DTP_CONFIG.get_ontology_uri('processStart'): process_start,
-            self.DTP_CONFIG.get_ontology_uri('lastUpdatedOn'): last_updated,
             "_outE": out_edge_to_actions
         }
 
+        if process_start:
+            query_dict[self.DTP_CONFIG.get_ontology_uri('processStart')] = process_start
+
+        if last_updated:
+            query_dict[self.DTP_CONFIG.get_ontology_uri('lastUpdatedOn')] = last_updated
+
         if process_end:
             query_dict[self.DTP_CONFIG.get_ontology_uri('processEnd')] = process_end
+
+        if target_activity_iri:
+            query_dict["_outE"].append({
+                "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
+                "_targetIRI": target_activity_iri
+            })
+
+        if task_type:
+            query_dict["_outE"].append({
+                "_label": self.DTP_CONFIG.get_ontology_uri('hasTaskType'),
+                "_targetIRI": task_type
+            })
 
         payload = json.dumps([query_dict])
 
@@ -132,16 +242,20 @@ class UpdateAPI:
                 return False
         return True
 
-    def update_construction_node(self, constr_iri, list_of_operation_iri):
+    def update_construction_node(self, productionMethodType, constr_node_iri, workpkg_node_iri, list_of_operation_iri):
         """
         The method updates construction node.
 
         Parameters
         ----------
-        constr_iri : str, obligatory
+        productionMethodType : str, obligatory
+            a valid production method type from corresponding work package
+        constr_node_iri : str, obligatory
             a valid IRI of a node.
+        workpkg_node_iri : str, obligatory
+            a valid work package IRI.
         list_of_operation_iri : list, optional
-            list of connection operation iri.
+            list of connected operation iri
 
         Raises
         ------
@@ -152,14 +266,16 @@ class UpdateAPI:
         bool
             return True if construction node has been created and False otherwise.
         """
-        # update node if operation iri list has at least one item
-        if len(list_of_operation_iri):
-            # creating backup of the node
-            node_info = self.fetch_nodes_with_iri(constr_iri)
-            dump_path = os.path.join(self.node_log_dir, f"{constr_iri.rsplit('/')[-1]}.json")
-            with open(dump_path, 'w') as fp:
-                json.dump(node_info, fp)
 
+        # creating backup of the node
+        node_info = self.fetch_node_with_iri(constr_node_iri)
+        dump_path = os.path.join(self.node_log_dir, f"{constr_node_iri.rsplit('/')[-1]}.json")
+        with open(dump_path, 'w') as fp:
+            json.dump(node_info, fp)
+
+        # update node if operation iri list has at least one item
+        out_edge_to_operation = []
+        if len(list_of_operation_iri):
             # collecting already existing edges
             already_existing_edges = node_info['items'][0]['_outE']
             out_edge_to_operation = [*already_existing_edges]
@@ -171,24 +287,35 @@ class UpdateAPI:
                 }
                 out_edge_to_operation.append(out_edge_dict)
 
-            payload = json.dumps([{
-                "_domain": self.DTP_CONFIG.get_domain(),
-                "_iri": constr_iri,
-                "_outE": out_edge_to_operation
-            }])
+        query_dict = {
+            "_domain": self.DTP_CONFIG.get_domain(),
+            "_iri": constr_node_iri,
+            "_outE": out_edge_to_operation
+        }
 
-            response = self.put_guarded_request(payload=payload, url=self.DTP_CONFIG.get_api_url('update_set'))
-            if not self.simulation_mode:
-                if response.ok:
-                    if self.session_logger is not None:
-                        self.session_logger.info(f"DTP_API - UPDATE_CONSTRUCTION_IRI: {constr_iri}, {dump_path}")
-                    return True
-                else:
-                    logger_global.error("Updating operation node failed. Response code: " + str(response.status_code))
-                    return False
-            return True
-        else:
-            return True
+        if productionMethodType:
+            query_dict["_outE"].append({
+                "_label": self.DTP_CONFIG.get_ontology_uri('hasProductionMethodType'),
+                "_targetIRI": productionMethodType
+            })
+
+        if workpkg_node_iri:
+            query_dict["_outE"].append({
+                "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
+                "_targetIRI": workpkg_node_iri
+            })
+
+        payload = json.dumps([query_dict])
+
+        response = self.put_guarded_request(payload=payload, url=self.DTP_CONFIG.get_api_url('update_set'))
+        if not self.simulation_mode:
+            if response.ok:
+                if self.session_logger is not None:
+                    self.session_logger.info(f"DTP_API - UPDATE_CONSTRUCTION_IRI: {constr_node_iri}, {dump_path}")
+                return True
+            else:
+                logger_global.error("Updating operation node failed. Response code: " + str(response.status_code))
+                return False
 
     def delete_param_in_node(self, node_iri, field, previous_field_value=None, field_placeholder="delete",
                              is_revert_session=False):
