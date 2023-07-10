@@ -5,6 +5,7 @@
 #  This file cannot be used without a written permission from the author(s).
 
 import json
+import os
 
 import requests
 import validators
@@ -86,6 +87,11 @@ class RevertAPI:
         bool
             True if an element has been deleted and False otherwise
         """
+        # creating backup of the node
+        node_info = self.fetch_node_with_iri(node_iri)
+        dump_path = os.path.join(self.node_log_dir, f"{node_iri.rsplit('/')[-1]}.json")
+        with open(dump_path, 'w') as fp:
+            json.dump(node_info, fp)
 
         if not validators.url(node_iri):
             raise Exception("Sorry, the target IRI is not a valid URL.")
@@ -101,6 +107,8 @@ class RevertAPI:
         if not self.simulation_mode:
             if response.ok:
                 logger_global.info("The node: " + node_iri + ", has been deleted.")
+                if self.session_logger is not None:
+                    self.session_logger.info(f"DTP_API - DELETE_NODE_IRI: {node_iri}, {dump_path}")
                 return True
             else:
                 logger_global.error(
