@@ -184,7 +184,7 @@ class UpdateAPI:
             return True if operation node has been updated and False otherwise.
         """
         # creating backup of the node
-        node_info = self.fetch_nodes_with_iri(oper_node_iri)
+        node_info = self.fetch_node_with_iri(oper_node_iri)
         dump_path = os.path.join(self.node_log_dir, f"{oper_node_iri.rsplit('/')[-1]}.json")
         with open(dump_path, 'w') as fp:
             json.dump(node_info, fp)
