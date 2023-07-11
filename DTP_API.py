@@ -25,7 +25,7 @@ try:
 except ModuleNotFoundError:
     import sys
 
-    sys.path.append('DTP_API')
+    sys.path.insert(0, os.path.dirname(__file__))
     from DTP_config import DTPConfig
 
 from dtp_apis.count_DTP_API import CountAPI
