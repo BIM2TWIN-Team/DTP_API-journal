@@ -33,6 +33,7 @@
         <URI function="timeStamp" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#timeStamp</URI>
         <URI function="id" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#id</URI>
         <URI function="hasElementType" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#hasElementType</URI>
+        <URI function="activityName" type="xs:anyURI">http://iot.linkeddata.es/def/wot#name</URI>
         <URI function="hasGeometryStatusType" type="xs:anyURI">
             https://www.bim2twin.eu/ontology/Core#hasGeometryStatusType
         </URI>
