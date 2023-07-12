@@ -100,7 +100,7 @@ class UpdateAPI:
         with open(dump_path, 'w') as fp:
             json.dump(node_info, fp)
 
-        out_edge_dict = {}
+        out_edge_dict = []
         if target_as_built_iri:
             out_edge_dict = {
                 "_label": self.DTP_CONFIG.get_ontology_uri('hasAction'),
