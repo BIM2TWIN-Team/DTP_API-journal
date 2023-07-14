@@ -25,7 +25,7 @@ try:
 except ModuleNotFoundError:
     import sys
 
-    sys.path.append('DTP_API')
+    sys.path.insert(0, os.path.dirname(__file__))
     from DTP_config import DTPConfig
 
 from dtp_apis.count_DTP_API import CountAPI
@@ -110,14 +110,15 @@ class DTPApi(FetchAPI, CountAPI, CreateAPI, LinkAPI, RevertAPI, SendAPI, UpdateA
             self.log_markers = {**self.log_markers_node_classes, **other_log_markers}
 
         # initialise session logger
-        session_log_dir = os.path.join(self.DTP_CONFIG.get_log_path(), "sessions")
-        self.node_log_dir = os.path.join(self.DTP_CONFIG.get_log_path(), f"nodes-{time.strftime('%Y%m%d-%H%M%S')}")
-        if not os.path.exists(session_log_dir):
-            os.makedirs(session_log_dir)
-        if not os.path.exists(self.node_log_dir):
-            os.makedirs(self.node_log_dir)
-        session_log_path = os.path.join(session_log_dir, f"db_session-{time.strftime('%Y%m%d-%H%M%S')}.log")
-        self.init_logger(session_log_path)
+        if not simulation_mode:
+            session_log_dir = os.path.join(self.DTP_CONFIG.get_log_path(), "sessions")
+            self.node_log_dir = os.path.join(self.DTP_CONFIG.get_log_path(), f"nodes-{time.strftime('%Y%m%d-%H%M%S')}")
+            if not os.path.exists(session_log_dir):
+                os.makedirs(session_log_dir)
+            if not os.path.exists(self.node_log_dir):
+                os.makedirs(self.node_log_dir)
+            session_log_path = os.path.join(session_log_dir, f"db_session-{time.strftime('%Y%m%d-%H%M%S')}.log")
+            self.init_logger(session_log_path)
 
     def init_logger(self, session_file):
         """

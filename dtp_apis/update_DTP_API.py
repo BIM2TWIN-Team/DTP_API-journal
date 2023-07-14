@@ -110,7 +110,7 @@ class UpdateAPI:
         query_dict = {
             "_domain": self.DTP_CONFIG.get_domain(),
             "_iri": action_node_iri,
-            "_outE": out_edge_dict
+            "_outE": [out_edge_dict]
         }
 
         if contractor:
