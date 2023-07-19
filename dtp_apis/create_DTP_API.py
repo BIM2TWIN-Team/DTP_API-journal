@@ -209,8 +209,8 @@ class CreateAPI:
                 return False
         return True
 
-    def create_action_node(self, task_type, action_node_iri, task_iri, target_as_built_iri, contractor,
-                           process_start, process_end):
+    def create_action_node(self, action_node_iri, task_type=None, task_iri=None, target_as_built_iri=None,
+                           contractor=None, process_start=None, process_end=None):
         """
         The method creates a new action.
 
@@ -291,8 +291,8 @@ class CreateAPI:
                 return False
         return True
 
-    def create_operation_node(self, task_type, oper_node_iri, target_activity_iri, list_of_action_iri, process_start,
-                              last_updated, process_end):
+    def create_operation_node(self, oper_node_iri, task_type=None, target_activity_iri=None, list_of_action_iri=None,
+                              process_start=None, last_updated=None, process_end=None):
         """
         The method creates a new operation.
 
@@ -323,6 +323,8 @@ class CreateAPI:
             return True if a new operation node has been created and False otherwise.
         """
 
+        if list_of_action_iri is None:
+            list_of_action_iri = []
         if not validators.url(oper_node_iri):
             raise Exception("Sorry, the IRI is not a valid URL.")
 
@@ -379,7 +381,8 @@ class CreateAPI:
                 return False
         return True
 
-    def create_construction_node(self, productionMethodType, constr_node_iri, workpkg_node_iri, list_of_operation_iri):
+    def create_construction_node(self, constr_node_iri, productionMethodType=None, workpkg_node_iri=None,
+                                 list_of_operation_iri=None):
         """
         The method creates a new construction.
 
@@ -404,6 +407,8 @@ class CreateAPI:
             return True if a new construction node has been created and False otherwise.
         """
 
+        if list_of_operation_iri is None:
+            list_of_operation_iri = []
         if not validators.url(constr_node_iri):
             raise Exception("Sorry, the IRI is not a valid URL.")
 
