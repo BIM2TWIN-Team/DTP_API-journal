@@ -13,7 +13,7 @@ jobs:
     - name: Upload md files to Wiki
       uses: docker://decathlon/wiki-page-creator-action:latest
       env:
-        ACTION_MAIL: 26373373+alwynmathew@users.noreply.github.com
+        ACTION_MAIL: ${{ secrets.ALWYN_EMAIL }}
         ACTION_NAME: alwynmathew
         GH_PAT: ${{ secrets.GH_PAT }}
         MD_FOLDER: wiki
