@@ -2,21 +2,19 @@ on:
     push:
         branches:
             - main
-    pull_request:
-        branches:
-            - main
-name: Wiki Sync
+name: Milestone Closure
 jobs:
-    update-wiki:
-        runs-on: ubuntu-latest
-        steps:
-          - uses: actions/checkout@master
-          - name: Sync Wiki
-            uses: joeizzard/action-wiki-sync@master
-            with:
-                username: alwynmathew
-                access_token: ${{ secrets.GH_PAT }}
-                wiki_folder: wiki
-                commit_username: 'b2t-team'
-                commit_email: '26373373+alwynmathew@users.noreply.github.com'
-                commit_message: 'action: wiki sync'
+  release-notes:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Upload md files to Wiki
+      uses: docker://decathlon/wiki-page-creator-action:latest
+      env:
+        ACTION_MAIL: 26373373+alwynmathew@users.noreply.github.com
+        ACTION_NAME: alwynmathew
+        GH_PAT: ${{ secrets.GH_PAT }}
+        MD_FOLDER: wiki
+        OWNER: BIM2TWIN-Team
+        REPO_NAME: DTP_API
+        SKIP_MD: README.md
