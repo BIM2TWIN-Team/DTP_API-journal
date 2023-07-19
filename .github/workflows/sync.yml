@@ -1,0 +1,22 @@
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
+name: Wiki Sync
+jobs:
+    update-wiki:
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@master
+          - name: Sync Wiki
+            uses: joeizzard/action-wiki-sync@master
+            with:
+                username: alwynmathew
+                access_token: ${{ secrets.GH_PAT }}
+                wiki_folder: wiki
+                commit_username: 'b2t-team'
+                commit_email: '26373373+alwynmathew@users.noreply.github.com'
+                commit_message: 'action: wiki sync'
