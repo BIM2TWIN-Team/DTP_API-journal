@@ -2,7 +2,7 @@
 
 This repository contains the first version of the API to communicate with Digital Twin Platform (DTP),
 i.e., [Thing'in](https://thinginthefuture.bim2twin.eu). The purpose of this document is to explain the code and its
-usage.
+usage. The [wiki](https://github.com/BIM2TWIN-Team/DTP_API/wiki) have more details of the platform.
 
 The code was extracted from the internal code of WP3.
 
@@ -44,9 +44,9 @@ token. Session is logged only for `create_DTP_API`, `link_DTP_API` and `update_D
 
 ```
 9-Oct-22 15:57:34 : INFO : New session has been started.
-09-Oct-22 15:57:34 : INFO : Work folder set to: C:\Users\kpluta\Projects\BIM2TWIN-WP3\DTP\integration_v1
-09-Oct-22 15:57:34 : INFO : XML config set to: C:\Users\kpluta\Projects\BIM2TWIN-WP3\DTP\integration_v1\DTP_config.xml
-09-Oct-22 15:57:34 : INFO : PCD set to: C:\Users\kpluta\Projects\BIM2TWIN-WP3\DTP\integration_v1\tests\dummy_GA_PCD.ply
+09-Oct-22 15:57:34 : INFO : Work folder set to: path/to/work/dir
+09-Oct-22 15:57:34 : INFO : XML config set to: path/to/DTP_config.xml
+09-Oct-22 15:57:34 : INFO : PCD set to: path/to/dummy_PCD.ply
 09-Oct-22 15:57:34 : INFO : Running in the simulator mode.
 09-Oct-22 15:57:34 : INFO : DTP_API - START SESSION
 09-Oct-22 15:57:34 : INFO : HTTP request: 
@@ -193,5 +193,9 @@ python3 delete_node.py --xml_path ../DTP_config.xml
 Revert multiple sessions (please note that all session files should be in one folder)
 
 ```shell
-python3 revert_session.py --xml_path ../DTP_config.xml --revert_dir /path/to/sessions/dir
+python3 revert_muliple_sessions.py --xml_path ../DTP_config.xml --revert_dir /path/to/sessions/dir
 ```
+
+## Want to contribute to the 📗[wiki](https://github.com/BIM2TWIN-Team/DTP_API/wiki)?
+
+Add/edit/delete markdown files or contents of the markdown files in `wiki` directory and raise a PR to the `main` branch.
