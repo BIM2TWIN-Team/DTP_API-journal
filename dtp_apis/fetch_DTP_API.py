@@ -810,6 +810,49 @@ class FetchAPI:
         req_url = self.DTP_CONFIG.get_api_url('get_find_elements') if not url else url
         return self.post_general_request(payload, req_url).json()
 
+
+    def fetch_task_connected_asdesigned_nodes(self, task_node_iri, url=None):
+        """
+        The method fetches as-desgined nodes connected to a node identified by task_node_iri
+
+        Parameters
+        ----------
+        task_node_iri : str, obligatory
+            a valid IRI of a node.
+        url : str, optional
+            used to fetch a next page
+
+        Returns
+        ------
+        dictionary
+            JSON mapped to a dictionary. The data contain as-designed nodes connected to task_node_iri.
+        """
+
+        payload = json.dumps({
+            "query": [{
+                "$domain": self.DTP_CONFIG.get_domain(),
+                "$iri": task_node_iri,
+                "->" + self.DTP_CONFIG.get_ontology_uri('hasTarget'): {
+                    "$alias": "asdesigned"
+                }
+            },
+                {
+                    "$alias": "asdesigned",
+                    "$domain": self.DTP_CONFIG.get_domain(),
+                    "$classes": {
+                        "$contains": self.DTP_CONFIG.get_ontology_uri('classElement'),
+                        "$inheritance": True
+                    },
+                    self.DTP_CONFIG.get_ontology_uri('isAsDesigned'): True
+                }
+            ],
+            "return": "asdesigned"
+        })
+
+        req_url = self.DTP_CONFIG.get_api_url('get_find_elements') if not url else url
+        return self.post_general_request(payload, req_url).json()
+
+
     def fetch_task_connected_activity_nodes(self, task_node_iri, url=None):
         """
         The method fetches activity nodes connected to a node identified by task_node_iri
