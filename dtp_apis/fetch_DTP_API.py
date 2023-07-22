@@ -1051,6 +1051,70 @@ class FetchAPI:
         req_url = self.DTP_CONFIG.get_api_url('get_find_elements') if not url else url
         return self.post_general_request(payload, req_url).json()
 
+
+    def fetch_workpkg_connected_asbuilt_nodes(self, workpkg_node_iri, url=None):
+        """
+        The method fetches as-built nodes connected to a node identified by workpkg_node_iri
+
+        Parameters
+        ----------
+        workpkg_node_iri : str, obligatory
+            a valid IRI of a node.
+        url : str, optional
+            used to fetch a next page
+
+        Returns
+        ------
+        dictionary
+            JSON mapped to a dictionary. The data contain asbuilt nodes connected to workpkg_node_iri.
+        """
+
+        payload = json.dumps({
+            "query": [{
+                "$alias": "workpkg",
+                "$iri": workpkg_node_iri,
+                "$domain": self.DTP_CONFIG.get_domain(),
+                "$classes": {
+                    "$contains": self.DTP_CONFIG.get_ontology_uri('workpackage')
+                },
+                "->" + self.DTP_CONFIG.get_ontology_uri('hasActivity'): {
+                    "$alias": "activity"
+                }
+            },
+            {
+                "$alias": "activity",
+                "$domain": self.DTP_CONFIG.get_domain(),
+                "$classes": {
+                    "$contains": self.DTP_CONFIG.get_ontology_uri('activity')
+                },
+                "->" + self.DTP_CONFIG.get_ontology_uri('hasTask'): {
+                    "$alias": "task"
+                }
+            },
+            {
+                "$alias": "task",
+                "$domain": self.DTP_CONFIG.get_domain(),
+                "->" + self.DTP_CONFIG.get_ontology_uri('hasTarget'): {
+                    "$alias": "asdesigned"
+                }
+            },
+            {
+                "$alias": "asdesigned",
+                "$domain": self.DTP_CONFIG.get_domain(),
+                "$classes": {
+                    "$contains": self.DTP_CONFIG.get_ontology_uri('classElement'),
+                    "$inheritance": True
+            },
+                self.DTP_CONFIG.get_ontology_uri('isAsDesigned'): True
+            }
+            ],
+            "return": "asdesigned"
+        })
+
+        req_url = self.DTP_CONFIG.get_api_url('get_find_elements') if not url else url
+        return self.post_general_request(payload, req_url).json()
+
+
     def fetch_blobs_for_node(self, node_uuid):
         """
         The method queries blobs for a given node.
