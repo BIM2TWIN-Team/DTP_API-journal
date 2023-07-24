@@ -110,15 +110,32 @@ class DTPApi(FetchAPI, CountAPI, CreateAPI, LinkAPI, RevertAPI, SendAPI, UpdateA
             self.log_markers = {**self.log_markers_node_classes, **other_log_markers}
 
         # initialise session logger
-        if not simulation_mode:
-            session_log_dir = os.path.join(self.DTP_CONFIG.get_log_path(), "sessions")
-            self.node_log_dir = os.path.join(self.DTP_CONFIG.get_log_path(), f"nodes-{time.strftime('%Y%m%d-%H%M%S')}")
-            if not os.path.exists(session_log_dir):
-                os.makedirs(session_log_dir)
-            if not os.path.exists(self.node_log_dir):
-                os.makedirs(self.node_log_dir)
-            session_log_path = os.path.join(session_log_dir, f"db_session-{time.strftime('%Y%m%d-%H%M%S')}.log")
-            self.init_logger(session_log_path)
+        session_log_dir = os.path.join(self.DTP_CONFIG.get_log_path(), "sessions")
+        self.node_log_dir = os.path.join(self.DTP_CONFIG.get_log_path(), f"nodes-{time.strftime('%Y%m%d-%H%M%S')}")
+        if not os.path.exists(session_log_dir):
+            os.makedirs(session_log_dir)
+        if not os.path.exists(self.node_log_dir):
+            os.makedirs(self.node_log_dir)
+        session_log_path = os.path.join(session_log_dir, f"db_session-{time.strftime('%Y%m%d-%H%M%S')}.log")
+        self.init_logger(session_log_path)
+        
+        
+    def set_simulation_mode(self, flag):
+        """
+        Method used for channging the simulation mode between on (true) and off (false).
+
+        Parameters
+        ----------
+        flag: bool obligatory
+           if true then the simulation mode is set to on, and off otherwise.
+        Returns
+        -------
+        bool
+            The old value of the simulation mode.
+        """
+        old_value = self.simulation_mode
+        self.simulation_mode = flag
+        return old_value
 
     def init_logger(self, session_file):
         """
