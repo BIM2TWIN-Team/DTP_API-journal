@@ -122,7 +122,7 @@ class DTPApi(FetchAPI, CountAPI, CreateAPI, LinkAPI, RevertAPI, SendAPI, UpdateA
         
     def set_simulation_mode(self, flag):
         """
-        Method used for channging the simulation mode between on (true) and off (false).
+        Method used for changing the simulation mode between on (true) and off (false).
 
         Parameters
         ----------
