@@ -198,4 +198,4 @@ python3 revert_muliple_sessions.py --xml_path ../DTP_config.xml --revert_dir /pa
 
 ## Want to contribute to the 📗[wiki](https://github.com/BIM2TWIN-Team/DTP_API/wiki)?
 
-Add/edit/delete markdown files or contents of the markdown files in `wiki` directory and raise a PR to the `main` branch.
+Add/edit/delete markdown files in `wiki` directory and raise a PR to the `main` branch.
