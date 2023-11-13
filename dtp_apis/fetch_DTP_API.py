@@ -1170,14 +1170,12 @@ class FetchAPI:
         req_url = self.DTP_CONFIG.get_api_url('get_find_elements') if not url else url
         return self.post_general_request(payload, req_url).json()
 
-    def fetch_subgraph(self, async_fetch=False, url=None):
+    def fetch_subgraph(self, url=None):
         """
         Fetch subgraph Activity -> Element (as-designed) -> Element (as-built) with SDIF
 
         Parameters
         ----------
-        async_fetch: bool, optional
-            Asynchronous fetch or not
         url : str, optional
             SDIF url
 
@@ -1198,7 +1196,7 @@ class FetchAPI:
         """
 
         payload = json.dumps({
-            "async": async_fetch,
+            "async": False,
             "params": [
                 {
                     "name": "domain",
