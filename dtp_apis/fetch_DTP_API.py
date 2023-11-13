@@ -75,6 +75,8 @@ class FetchAPI:
         returns dictionary created from JSON
     fetch_action_connected_asbuilt_nodes(action_node_iri, url)
         returns dictionary created from JSON
+    fetch_subgraph(url)
+        returns subgraph Activity -> Element (as-designed) -> Element (as-built)
     fetch_blobs_for_node(node_uuid)
         returns dictionary created from JSON
     download_blob_as_text(blob_uuid)
@@ -824,7 +826,6 @@ class FetchAPI:
         req_url = self.DTP_CONFIG.get_api_url('get_find_elements') if not url else url
         return self.post_general_request(payload, req_url).json()
 
-
     def fetch_task_connected_asdesigned_nodes(self, task_node_iri, url=None):
         """
         The method fetches as-desgined nodes connected to a node identified by task_node_iri
@@ -865,7 +866,6 @@ class FetchAPI:
 
         req_url = self.DTP_CONFIG.get_api_url('get_find_elements') if not url else url
         return self.post_general_request(payload, req_url).json()
-
 
     def fetch_task_connected_activity_nodes(self, task_node_iri, url=None):
         """
@@ -1108,7 +1108,6 @@ class FetchAPI:
         req_url = self.DTP_CONFIG.get_api_url('get_find_elements') if not url else url
         return self.post_general_request(payload, req_url).json()
 
-
     def fetch_workpkg_connected_asbuilt_nodes(self, workpkg_node_iri, url=None):
         """
         The method fetches as-built nodes connected to a node identified by workpkg_node_iri
@@ -1138,32 +1137,32 @@ class FetchAPI:
                     "$alias": "activity"
                 }
             },
-            {
-                "$alias": "activity",
-                "$domain": self.DTP_CONFIG.get_domain(),
-                "$classes": {
-                    "$contains": self.DTP_CONFIG.get_ontology_uri('activity')
+                {
+                    "$alias": "activity",
+                    "$domain": self.DTP_CONFIG.get_domain(),
+                    "$classes": {
+                        "$contains": self.DTP_CONFIG.get_ontology_uri('activity')
+                    },
+                    "->" + self.DTP_CONFIG.get_ontology_uri('hasTask'): {
+                        "$alias": "task"
+                    }
                 },
-                "->" + self.DTP_CONFIG.get_ontology_uri('hasTask'): {
-                    "$alias": "task"
+                {
+                    "$alias": "task",
+                    "$domain": self.DTP_CONFIG.get_domain(),
+                    "->" + self.DTP_CONFIG.get_ontology_uri('hasTarget'): {
+                        "$alias": "asdesigned"
+                    }
+                },
+                {
+                    "$alias": "asdesigned",
+                    "$domain": self.DTP_CONFIG.get_domain(),
+                    "$classes": {
+                        "$contains": self.DTP_CONFIG.get_ontology_uri('classElement'),
+                        "$inheritance": True
+                    },
+                    self.DTP_CONFIG.get_ontology_uri('isAsDesigned'): True
                 }
-            },
-            {
-                "$alias": "task",
-                "$domain": self.DTP_CONFIG.get_domain(),
-                "->" + self.DTP_CONFIG.get_ontology_uri('hasTarget'): {
-                    "$alias": "asdesigned"
-                }
-            },
-            {
-                "$alias": "asdesigned",
-                "$domain": self.DTP_CONFIG.get_domain(),
-                "$classes": {
-                    "$contains": self.DTP_CONFIG.get_ontology_uri('classElement'),
-                    "$inheritance": True
-            },
-                self.DTP_CONFIG.get_ontology_uri('isAsDesigned'): True
-            }
             ],
             "return": "asdesigned"
         })
@@ -1171,6 +1170,45 @@ class FetchAPI:
         req_url = self.DTP_CONFIG.get_api_url('get_find_elements') if not url else url
         return self.post_general_request(payload, req_url).json()
 
+    def fetch_subgraph(self, async_fetch=False, url=None):
+        """
+        Fetch subgraph Activity -> Element (as-designed) -> Element (as-built) with SDIF
+
+        Parameters
+        ----------
+        async_fetch: bool, optional
+            Asynchronous fetch or not
+        url : str, optional
+            SDIF url
+
+        Returns
+        -------
+        dictionary
+            JSON mapped to a dictionary. The data contain requested subgraph nodes as follows:
+            .
+            └── response
+                └── value
+                    ├── dict
+                    .
+                    └── dict
+                        ├── activity
+                        ├── as-designed element
+                        └── as-performed element
+
+        """
+
+        payload = json.dumps({
+            "async": async_fetch,
+            "params": [
+                {
+                    "name": "domain",
+                    "value": self.DTP_CONFIG.get_domain()
+                }
+            ]
+        })
+
+        req_url = self.DTP_CONFIG.get_api_url('fetch_subgraph_sdif') if not url else url
+        return self.post_general_request(payload, req_url).json()
 
     def fetch_blobs_for_node(self, node_uuid):
         """
