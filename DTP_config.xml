@@ -75,8 +75,8 @@
         <URI function="constructionContractor" type="xs:anyURI">
             https://www.bim2twin.eu/ontology/Core#constructionContractor
         </URI>
-        <URI function="plannedStart" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#plannedStart</URI>
-        <URI function="plannedEnd" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#plannedEnd</URI>
+        <URI function="plannedStart" type="xs:anyURI">https://dtc-ontology.cms.ed.tum.de/ontology#startTime</URI>
+        <URI function="plannedEnd" type="xs:anyURI">https://dtc-ontology.cms.ed.tum.de/ontology#endTime</URI>
         <URI function="hasActivity" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#hasActivity</URI>
         <URI function="hasAction" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#hasAction</URI>
         <URI function="workpackage" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#WorkPackage</URI>
