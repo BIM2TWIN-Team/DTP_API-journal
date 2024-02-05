@@ -31,10 +31,10 @@
         </URL>
     </API_URLS>
     <ONTOLOGY_URIS>
-        <URI function="isAsDesigned" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#isAsDesigned</URI>
+        <URI function="isAsDesigned" type="xs:anyURI">https://dtc-ontology.cms.ed.tum.de/ontology#isAsDesigned</URI>
         <URI function="progress" type="xs:anyURI">https://dtc-ontology.cms.ed.tum.de/ontology#progress</URI>
         <URI function="timeStamp" type="xs:anyURI">https://dtc-ontology.cms.ed.tum.de/ontology#timeStamp</URI>
-        <URI function="id" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#id</URI>
+        <URI function="id" type="xs:anyURI">https://dtc-ontology.cms.ed.tum.de/ontology#id</URI>
         <URI function="hasElementType" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#hasElementType</URI>
         <URI function="activityName" type="xs:anyURI">http://iot.linkeddata.es/def/wot#name</URI>
         <URI function="hasGeometryStatusType" type="xs:anyURI">
@@ -77,8 +77,8 @@
         <URI function="constructionContractor" type="xs:anyURI">
             https://dtc-ontology.cms.ed.tum.de/ontology#contractor
         </URI>
-        <URI function="plannedStart" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#plannedStart</URI>
-        <URI function="plannedEnd" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#plannedEnd</URI>
+        <URI function="plannedStart" type="xs:anyURI">https://dtc-ontology.cms.ed.tum.de/ontology#startTime</URI>
+        <URI function="plannedEnd" type="xs:anyURI">https://dtc-ontology.cms.ed.tum.de/ontology#endTime</URI>
         <URI function="hasActivity" type="xs:anyURI">https://dtc-ontology.cms.ed.tum.de/ontology#hasActivity</URI>
         <URI function="hasAction" type="xs:anyURI">https://dtc-ontology.cms.ed.tum.de/ontology#hasAction</URI>
         <URI function="workpackage" type="xs:anyURI">https://dtc-ontology.cms.ed.tum.de/ontology#WorkPackage</URI>
@@ -98,12 +98,12 @@
             https://dtc-ontology.cms.ed.tum.de/ontology#ConstructionSchedule
         </URI>
         <URI function="Wall" type="xs:anyURI">https://pi.pauwel.be/voc/buildingelement#Wall</URI>
-        <URI function="Column" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#Column</URI>
+        <URI function="Column" type="xs:anyURI">https://pi.pauwel.be/voc/buildingelement#Column</URI>
         <URI function="Covering" type="xs:anyURI">https://pi.pauwel.be/voc/buildingelement#Covering</URI>
         <URI function="BuildingElementProxy" type="xs:anyURI">
             https://www.bim2twin.eu/ontology/Core#BuildingElementProxy
         </URI>
-        <URI function="CurtainWall" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#CurtainWall</URI>
+        <URI function="CurtainWall" type="xs:anyURI">https://pi.pauwel.be/voc/buildingelement#CurtainWall</URI>
         <URI function="Stair" type="xs:anyURI">https://pi.pauwel.be/voc/buildingelement#Stair</URI>
         <URI function="RampFlight" type="xs:anyURI">https://pi.pauwel.be/voc/buildingelement#RampFlight</URI>
         <URI function="Slab" type="xs:anyURI">https://pi.pauwel.be/voc/buildingelement#Slab</URI>
