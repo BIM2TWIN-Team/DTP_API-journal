@@ -137,16 +137,16 @@
     </ONTOLOGY_URIS>
     <OBJECT_TYPES>
         <OBJECT_TYPE field="https://www.bim2twin.eu/ontology/Core#hasElementType">
-            https://www.bim2twin.eu/ontology/Core#Wall
+            https://pi.pauwel.be/voc/buildingelement#Wall
         </OBJECT_TYPE>
         <OBJECT_TYPE field="ifc:Class">IfcWall</OBJECT_TYPE>
         <OBJECT_TYPE field="ifc:Class">IfcWallStandardCase</OBJECT_TYPE>
         <OBJECT_TYPE field="ifc:Class">IfcColumn</OBJECT_TYPE>
     </OBJECT_TYPES>
     <OBJECT_TYPE_CONVERSIONS>
-        <CONVERSION from="IfcWall" to="https://www.bim2twin.eu/ontology/Core#Wall"/>
-        <CONVERSION from="IfcWallStandardCase" to="https://www.bim2twin.eu/ontology/Core#Wall"/>
-        <CONVERSION from="IfcColumn" to="https://www.bim2twin.eu/ontology/Core#Column"/>
+        <CONVERSION from="IfcWall" to="https://pi.pauwel.be/voc/buildingelement#Wall"/>
+        <CONVERSION from="IfcWallStandardCase" to="https://pi.pauwel.be/voc/buildingelement#Wall"/>
+        <CONVERSION from="IfcColumn" to="https://pi.pauwel.be/voc/buildingelement#Column"/>
     </OBJECT_TYPE_CONVERSIONS>
     <METHODS>
         <METHOD>
@@ -194,7 +194,7 @@
         <KPI indicator_type="defect">
             <OBJECT_CLASSES>
                 <CLASS name="IfcColumn"/>
-                <CLASS name="https://www.bim2twin.eu/ontology/Core#Column"/>
+                <CLASS name="https://pi.pauwel.be/voc/buildingelement#Column"/>
             </OBJECT_CLASSES>
             <DEFECT type="displacement" computation_strategy="as_designed-vs-as_built"/>
             <VALUE_RANGE_MAPS>
@@ -206,7 +206,7 @@
         <KPI indicator_type="defect">
             <OBJECT_CLASSES>
                 <CLASS name="IfcColumn"/>
-                <CLASS name="https://www.bim2twin.eu/ontology/Core#Column"/>
+                <CLASS name="https://pi.pauwel.be/voc/buildingelement#Column"/>
             </OBJECT_CLASSES>
             <DEFECT type="axis_deviation" computation_strategy="as_designed-vs-as_built"/>
             <VALUE_RANGE_MAPS>
