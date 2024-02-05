@@ -37,7 +37,7 @@ except ModuleNotFoundError:
 
 def get_element_type(DTP_CONFIG, element):
     """
-    The function returns element type. Only type fields defined in XML are recognized.
+    The function returns element type.
 
     Parameters
     ----------
@@ -50,15 +50,10 @@ def get_element_type(DTP_CONFIG, element):
         element type
     """
 
-    # ifc classes and old hasElementType
-    for key in DTP_CONFIG.get_object_type_classes():
-        if key in element.keys():
-            return element[key]
-
-    # if not found then search for the correctly defined type
-    for edge in element['_outE']:
-        if edge['_label'] == DTP_CONFIG.get_ontology_uri('hasElementType'):
-            return edge['_targetIRI']
+    # search over classes with exception to the base element type
+    for eclass in element['_classes']:
+        if eclass != DTP_CONFIG.get_ontology_uri('classElement'):
+            return eclass
 
     raise Exception("Element is of a type class not recognized by the system.")
 
