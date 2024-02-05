@@ -2,10 +2,10 @@
 <DTP_config>
     <NAME>ThingIn</NAME>
     <VERSION>1.5</VERSION>
-    <DEV_TOKEN type="xs:anyURI">/path/to/token/file</DEV_TOKEN>
-    <DTP_DOMAIN type="xs:anyURI">http://bim2twin.eu/conslam_testing/</DTP_DOMAIN>
+    <DEV_TOKEN type="xs:anyURI">/home/kacper/Projects/WP3-PCDStudio-JournalVersion/DTP_API/thingin_token.txt</DEV_TOKEN>
+    <DTP_DOMAIN type="xs:anyURI">http://bim2twin.eu/conslam_testing_2/ </DTP_DOMAIN>
     <KPI_DOMAIN type="xs:anyURI">http://bim2twin.eu/domain_x/kpi/</KPI_DOMAIN>
-    <LOG_DIR type="xs:anyURI">/path/to/log/dir</LOG_DIR>
+    <LOG_DIR type="xs:anyURI">/home/kacper/Projects/WP3-PCDStudio-JournalVersion/DTP_API/logs</LOG_DIR>
     <API_URLS>
         <URL function="get_find_elements" type="xs:anyURL">https://api.thinginthefuture.bim2twin.eu/avatars/find</URL>
         <URL function="add_node" type="xs:anyURL">https://api.thinginthefuture.bim2twin.eu/batch/avatars</URL>
@@ -31,11 +31,10 @@
         </URL>
     </API_URLS>
     <ONTOLOGY_URIS>
-        <URI function="isAsDesigned" type="xs:anyURI">https://dtc-ontology.cms.ed.tum.de/ontology#isAsDesigned</URI>
+        <URI function="isAsDesigned" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#isAsDesigned</URI>
         <URI function="progress" type="xs:anyURI">https://dtc-ontology.cms.ed.tum.de/ontology#progress</URI>
         <URI function="timeStamp" type="xs:anyURI">https://dtc-ontology.cms.ed.tum.de/ontology#timeStamp</URI>
         <URI function="id" type="xs:anyURI">https://dtc-ontology.cms.ed.tum.de/ontology#id</URI>
-        <URI function="hasElementType" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#hasElementType</URI>
         <URI function="activityName" type="xs:anyURI">http://iot.linkeddata.es/def/wot#name</URI>
         <URI function="hasGeometryStatusType" type="xs:anyURI">
             https://dtc-ontology.cms.ed.tum.de/ontology#GeometryStatusType
@@ -138,19 +137,6 @@
         <URI function="kpiIntervalEndDate" type="xs:anyURI">https://www.bim2twin.eu/ontology/kpi/intervalEndDate</URI>
         <URI function="kpiHasTaskType" type="xs:anyURI">https://www.bim2twin.eu/ontology/kpi/hasTaskType</URI>
     </ONTOLOGY_URIS>
-    <OBJECT_TYPES>
-        <OBJECT_TYPE field="https://www.bim2twin.eu/ontology/Core#hasElementType">
-            https://www.bim2twin.eu/ontology/Core#Wall
-        </OBJECT_TYPE>
-        <OBJECT_TYPE field="ifc:Class">IfcWall</OBJECT_TYPE>
-        <OBJECT_TYPE field="ifc:Class">IfcWallStandardCase</OBJECT_TYPE>
-        <OBJECT_TYPE field="ifc:Class">IfcColumn</OBJECT_TYPE>
-    </OBJECT_TYPES>
-    <OBJECT_TYPE_CONVERSIONS>
-        <CONVERSION from="IfcWall" to="https://www.bim2twin.eu/ontology/Core#Wall"/>
-        <CONVERSION from="IfcWallStandardCase" to="https://www.bim2twin.eu/ontology/Core#Wall"/>
-        <CONVERSION from="IfcColumn" to="https://www.bim2twin.eu/ontology/Core#Column"/>
-    </OBJECT_TYPE_CONVERSIONS>
     <METHODS>
         <METHOD>
             <NAME>mesh2pcd</NAME>

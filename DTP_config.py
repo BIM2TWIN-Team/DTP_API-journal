@@ -91,17 +91,6 @@ class DTPConfig:
         for uri in uris:
             self.ontology_uris[uri.attrib['function'].strip(' \t\n\r')] = uri.text.strip(' \t\n\r')
 
-    def __map_object_types(self, objet_types):
-        for obj_type in objet_types:
-            if not obj_type.text.strip(' \t\n\r') in self.objet_types:
-                self.objet_types.append(obj_type.text.strip())
-            if not obj_type.attrib['field'].strip(' \t\n\r') in self.objet_type_classes:
-                self.objet_type_classes.append(obj_type.attrib['field'].strip(' \t\n\r'))
-
-    def __map_object_type_conversions(self, objet_type_map):
-        for type_map in objet_type_map:
-            self.objet_type_maps[type_map.attrib['from'].strip(' \t\n\r')] = type_map.attrib['to'].strip(' \t\n\r')
-
     def __init__(self, xml_path):
         config = ET.parse(xml_path).getroot()
 
@@ -139,17 +128,6 @@ class DTPConfig:
         if not uris is None:
             self.__map_ontology_uris(uris)
 
-        self.objet_type_classes = []
-        self.objet_types = []
-        objet_types = config.find('OBJECT_TYPES')
-        if not objet_types is None:
-            self.__map_object_types(objet_types)
-
-        self.objet_type_maps = {}
-        objet_type_map = config.find('OBJECT_TYPE_CONVERSIONS')
-        if not objet_type_map is None:
-            self.__map_object_type_conversions(objet_type_map)
-
     def get_api_url(self, api_type, id=' '):
         if len(id.strip(' \t\n\r')) == 0:
             return self.api_uris[api_type]
@@ -173,12 +151,3 @@ class DTPConfig:
 
     def get_log_path(self):
         return self.log_dir
-
-    def get_object_types(self):
-        return self.objet_types
-
-    def get_object_type_classes(self):
-        return self.objet_type_classes
-
-    def get_object_type_conversion_map(self):
-        return self.objet_type_maps
