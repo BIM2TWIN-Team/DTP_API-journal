@@ -112,8 +112,7 @@ def get_info_from_log(line, marker):
         return [x.strip() for x in ids.split(',')]
 
 
-iri_map = {'ifc': 'asbuilt',
-           'task': 'action',
+iri_map = {'task': 'action',
            'activity': 'operation',
            'workpackage': 'construction'}
 
@@ -137,8 +136,10 @@ def create_as_performed_iri(as_planned_iri):
     if len(asplanned_substr) == 1:
         as_perf_node_id = as_planned_node_id.replace(asplanned_substr[0], iri_map[asplanned_substr[0]])
         return f"{base_uri}/{as_perf_node_id}"
+    elif len(asplanned_substr) > 1:
+        raise Exception(f"{as_planned_iri} cannot be converted to as-performed iri") 
     else:
-        raise Exception(f"{as_planned_iri} cannot be converted to as-performed iri")
+        return f"{base_uri}/asbuilt_{as_perf_node_id}"
 
 
 def read_ply_collection_date(ply_path):
