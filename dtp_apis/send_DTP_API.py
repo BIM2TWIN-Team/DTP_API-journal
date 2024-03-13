@@ -62,8 +62,8 @@ class SendAPI:
         """
 
         payload = {
-            "description": 'As-Built element, for now a copy of As-Designed',
-            "tags": 'WP3,mislata2,integration_v1',
+            "description": 'As-Built element reconstructed from PCD.',
+            "tags": 'TUM,UCAM,INRIA,ConSLAM,publication',
             "visibility": 0
         }
 
