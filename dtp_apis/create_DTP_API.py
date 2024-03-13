@@ -88,7 +88,7 @@ class CreateAPI:
         if progress == 100:
             payload = json.dumps([
                 {
-                    "_classes": [self.DTP_CONFIG.get_ontology_uri('classElement')],
+                    "_classes": [self.DTP_CONFIG.get_ontology_uri('classElement'), element_type],
                     "_domain": self.DTP_CONFIG.get_domain(),
                     "_iri": element_iri_uri,
                     "_visibility": 0,
@@ -99,10 +99,6 @@ class CreateAPI:
                         'CompletelyDetected'),
                     "_outE": [
                         {
-                            "_label": self.DTP_CONFIG.get_ontology_uri('hasElementType'),
-                            "_targetIRI": element_type
-                        },
-                        {
                             "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
                             "_targetIRI": target_iri
                         }
@@ -112,17 +108,13 @@ class CreateAPI:
         else:
             payload = json.dumps([
                 {
-                    "_classes": [self.DTP_CONFIG.get_ontology_uri('classElement')],
+                    "_classes": [self.DTP_CONFIG.get_ontology_uri('classElement'), element_type],
                     "_domain": self.DTP_CONFIG.get_domain(),
                     "_iri": element_iri_uri,
                     self.DTP_CONFIG.get_ontology_uri('isAsDesigned'): False,
                     self.DTP_CONFIG.get_ontology_uri('timeStamp'): timestamp,
                     self.DTP_CONFIG.get_ontology_uri('progress'): progress,
                     "_outE": [
-                        {
-                            "_label": self.DTP_CONFIG.get_ontology_uri('hasElementType'),
-                            "_targetIRI": element_type
-                        },
                         {
                             "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
                             "_targetIRI": target_iri
