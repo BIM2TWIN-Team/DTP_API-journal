@@ -85,44 +85,27 @@ class CreateAPI:
         if not validators.url(target_iri):
             raise Exception("Sorry, the target IRI is not a valid URL.")
 
-        if progress == 100:
-            payload = json.dumps([
+        query_dict = {
+            "_classes": [self.DTP_CONFIG.get_ontology_uri('classElement'), element_type],
+            "_domain": self.DTP_CONFIG.get_domain(),
+            "_iri": element_iri_uri,
+            "_visibility": 0,
+            self.DTP_CONFIG.get_ontology_uri('isAsDesigned'): False,
+            self.DTP_CONFIG.get_ontology_uri('timeStamp'): timestamp,
+            self.DTP_CONFIG.get_ontology_uri('progress'): progress,
+            "_outE": [
                 {
-                    "_classes": [self.DTP_CONFIG.get_ontology_uri('classElement'), element_type],
-                    "_domain": self.DTP_CONFIG.get_domain(),
-                    "_iri": element_iri_uri,
-                    "_visibility": 0,
-                    self.DTP_CONFIG.get_ontology_uri('isAsDesigned'): False,
-                    self.DTP_CONFIG.get_ontology_uri('timeStamp'): timestamp,
-                    self.DTP_CONFIG.get_ontology_uri('progress'): progress,
-                    self.DTP_CONFIG.get_ontology_uri('hasGeometryStatusType'): self.DTP_CONFIG.get_ontology_uri(
-                        'CompletelyDetected'),
-                    "_outE": [
-                        {
-                            "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
-                            "_targetIRI": target_iri
-                        }
-                    ]
+                    "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
+                    "_targetIRI": target_iri
                 }
-            ])
-        else:
-            payload = json.dumps([
-                {
-                    "_classes": [self.DTP_CONFIG.get_ontology_uri('classElement'), element_type],
-                    "_domain": self.DTP_CONFIG.get_domain(),
-                    "_iri": element_iri_uri,
-                    self.DTP_CONFIG.get_ontology_uri('isAsDesigned'): False,
-                    self.DTP_CONFIG.get_ontology_uri('timeStamp'): timestamp,
-                    self.DTP_CONFIG.get_ontology_uri('progress'): progress,
-                    "_outE": [
-                        {
-                            "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
-                            "_targetIRI": target_iri
-                        }
-                    ]
-                }
-            ])
+            ]
+        }
 
+        if progress == 100:
+            query_dict[self.DTP_CONFIG.get_ontology_uri('hasGeometryStatusType')] = self.DTP_CONFIG.get_ontology_uri(
+                'CompletelyDetected')
+
+        payload = json.dumps([query_dict])
         response = self.post_guarded_request(payload=payload, url=self.DTP_CONFIG.get_api_url('add_node'))
         if not self.simulation_mode:
             if response.ok:
