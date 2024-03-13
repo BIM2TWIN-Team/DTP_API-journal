@@ -78,7 +78,7 @@ class SendAPI:
                                files=files)
         prepared = req.prepare()
 
-        logger_global.info('HTTP request: \n' + self.__pretty_http_request_to_string(prepared))
+        logger_global.info('HTTP request: \n' + self.pretty_http_request_to_string(prepared))
 
         if not self.simulation_mode:
             response = session.send(prepared)
@@ -133,7 +133,7 @@ class SendAPI:
                                files=files)
         prepared = req.prepare()
 
-        logging.info('HTTP request: \n' + self.__pretty_http_request_to_string(prepared))
+        logging.info('HTTP request: \n' + self.pretty_http_request_to_string(prepared))
 
         if not self.simulation_mode:
             response = session.send(prepared)
