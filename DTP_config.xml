@@ -73,7 +73,7 @@
         <URI function="classificationSystem" type="xs:anyURI">https://dtc-ontology.cms.ed.tum.de/ontology#classificationSystem</URI>
         <URI function="processStart" type="xs:anyURI">https://dtc-ontology.cms.ed.tum.de/ontology#startTime</URI>
         <URI function="processEnd" type="xs:anyURI">https://dtc-ontology.cms.ed.tum.de/ontology#endTime</URI>
-        <URI function="lastUpdatedOn" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#lastUpdatedOn</URI>
+        <URI function="lastUpdatedOn" type="xs:anyURI">https://dtc-ontology.cms.ed.tum.de/ontology#timeStamp</URI>
         <URI function="asPerformedAction" type="xs:anyURI">https://dtc-ontology.cms.ed.tum.de/ontology#Action</URI>
         <URI function="constructionContractor" type="xs:anyURI">
             https://dtc-ontology.cms.ed.tum.de/ontology#contractor
