@@ -77,15 +77,18 @@ class UpdateAPI:
                 return False
         return True
 
-    def update_action_node(self, task_type, action_node_iri, task_iri, target_as_built_iri, contractor,
-                           process_start, process_end):
+    def update_action_node(self, action_node_iri, task_classification_code=None, task_classification_system=None,
+                           task_iri=None, target_as_built_iri=None, contractor=None, process_start=None,
+                           process_end=None):
         """
         The method updates a new operation.
 
         Parameters
         ----------
-        task_type : str, obligatory
-            a valid task type.
+        task_classification_code : str, obligatory
+            code of a classification system to specify the type of object or process.
+        task_classification_system : str, obligatory
+            a classification system to specify the type of object or process.
         action_node_iri: str, obligatory
             a valid action IRI of a node.
         task_iri:
@@ -124,6 +127,8 @@ class UpdateAPI:
         query_dict = {
             "_domain": self.DTP_CONFIG.get_domain(),
             "_iri": action_node_iri,
+            self.DTP_CONFIG.get_ontology_uri('classificationCode'): task_classification_code,
+            self.DTP_CONFIG.get_ontology_uri('classificationSystem'): task_classification_system,
             "_outE": [out_edge_dict]
         }
 
@@ -139,12 +144,6 @@ class UpdateAPI:
             query_dict["_outE"].append({
                 "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
                 "_targetIRI": task_iri
-            })
-
-        if task_type:
-            query_dict["_outE"].append({
-                "_label": self.DTP_CONFIG.get_ontology_uri('hasTaskType'),
-                "_targetIRI": task_type
             })
 
         if process_start:
@@ -166,15 +165,18 @@ class UpdateAPI:
                 return False
         return True
 
-    def update_operation_node(self, task_type, oper_node_iri, target_activity_iri, list_of_action_iri, process_start,
-                              last_updated, process_end):
+    def update_operation_node(self, oper_node_iri, op_classification_code=None, op_classification_system=None,
+                              target_activity_iri=None, list_of_action_iri=None, process_start=None, last_updated=None,
+                              process_end=None):
         """
         The method updates a new operation.
 
         Parameters
         ----------
-        task_type : str, obligatory
-            a valid task type from activity node.
+        op_classification_code : str, obligatory
+            code of a classification system to specify the type of object or process.
+        op_classification_system : str, obligatory
+            a classification system to specify the type of object or process.
         oper_node_iri : str, obligatory
             a valid IRI of a node.
         target_activity_iri : str, obligatory
@@ -219,6 +221,8 @@ class UpdateAPI:
         query_dict = {
             "_domain": self.DTP_CONFIG.get_domain(),
             "_iri": oper_node_iri,
+            self.DTP_CONFIG.get_ontology_uri('classificationCode'): op_classification_code,
+            self.DTP_CONFIG.get_ontology_uri('classificationSystem'): op_classification_system,
             "_outE": out_edge_to_actions
         }
 
@@ -237,12 +241,6 @@ class UpdateAPI:
                 "_targetIRI": target_activity_iri
             })
 
-        if task_type:
-            query_dict["_outE"].append({
-                "_label": self.DTP_CONFIG.get_ontology_uri('hasTaskType'),
-                "_targetIRI": task_type
-            })
-
         payload = json.dumps([query_dict])
 
         response = self.put_guarded_request(payload=payload, url=self.DTP_CONFIG.get_api_url('update_set'))
@@ -256,14 +254,12 @@ class UpdateAPI:
                 return False
         return True
 
-    def update_construction_node(self, productionMethodType, constr_node_iri, workpkg_node_iri, list_of_operation_iri):
+    def update_construction_node(self, constr_node_iri, workpkg_node_iri, list_of_operation_iri):
         """
         The method updates construction node.
 
         Parameters
         ----------
-        productionMethodType : str, obligatory
-            a valid production method type from corresponding work package
         constr_node_iri : str, obligatory
             a valid IRI of a node.
         workpkg_node_iri : str, obligatory
@@ -306,12 +302,6 @@ class UpdateAPI:
             "_iri": constr_node_iri,
             "_outE": out_edge_to_operation
         }
-
-        if productionMethodType:
-            query_dict["_outE"].append({
-                "_label": self.DTP_CONFIG.get_ontology_uri('hasProductionMethodType'),
-                "_targetIRI": productionMethodType
-            })
 
         if workpkg_node_iri:
             query_dict["_outE"].append({
