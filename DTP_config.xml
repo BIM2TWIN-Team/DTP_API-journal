@@ -69,7 +69,8 @@
         <URI function="activity" type="xs:anyURI">https://dtc-ontology.cms.ed.tum.de/ontology#Activity</URI>
         <URI function="asPerformedOperation" type="xs:anyURI">https://dtc-ontology.cms.ed.tum.de/ontology#Operation
         </URI>
-        <URI function="hasTaskType" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#hasTaskType</URI>
+        <URI function="classificationCode" type="xs:anyURI">https://dtc-ontology.cms.ed.tum.de/ontology#classificationCode</URI>
+        <URI function="classificationSystem" type="xs:anyURI">https://dtc-ontology.cms.ed.tum.de/ontology#classificationSystem</URI>
         <URI function="processStart" type="xs:anyURI">https://dtc-ontology.cms.ed.tum.de/ontology#startTime</URI>
         <URI function="processEnd" type="xs:anyURI">https://dtc-ontology.cms.ed.tum.de/ontology#endTime</URI>
         <URI function="lastUpdatedOn" type="xs:anyURI">https://www.bim2twin.eu/ontology/Core#lastUpdatedOn</URI>
@@ -84,9 +85,6 @@
         <URI function="workpackage" type="xs:anyURI">https://dtc-ontology.cms.ed.tum.de/ontology#WorkPackage</URI>
         <URI function="asPerformedConstruction" type="xs:anyURI">
             https://dtc-ontology.cms.ed.tum.de/ontology#Construction
-        </URI>
-        <URI function="hasProductionMethodType" type="xs:anyURI">
-            https://www.bim2twin.eu/ontology/Core#hasProductionMethodType
         </URI>
         <URI function="hasOperation" type="xs:anyURI">https://dtc-ontology.cms.ed.tum.de/ontology#hasOperation</URI>
         <URI function="hasWorkPackage" type="xs:anyURI">https://dtc-ontology.cms.ed.tum.de/ontology#hasWorkPackage

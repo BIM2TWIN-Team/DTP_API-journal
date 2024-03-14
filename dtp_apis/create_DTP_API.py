@@ -198,15 +198,17 @@ class CreateAPI:
                 return False
         return True
 
-    def create_action_node(self, action_node_iri, task_type=None, task_iri=None, target_as_built_iri=None,
-                           contractor=None, process_start=None, process_end=None):
+    def create_action_node(self, action_node_iri, task_classification_code=None, task_classification_system=None,
+                           task_iri=None, target_as_built_iri=None, contractor=None, process_start=None, process_end=None):
         """
         The method creates a new action.
 
         Parameters
         ----------
-        task_type : str, obligatory
-            a valid task type.
+        task_classification_code : str, obligatory
+            code of a classification system to specify the type of object or process.
+        task_classification_system : str, obligatory
+            a classification system to specify the type of object or process.
         action_node_iri: str, obligatory
             a valid action IRI of a node.
         task_iri:
@@ -238,6 +240,8 @@ class CreateAPI:
             "_domain": self.DTP_CONFIG.get_domain(),
             "_iri": action_node_iri,
             "_visibility": 0,
+            self.DTP_CONFIG.get_ontology_uri('classificationCode'): task_classification_code,
+            self.DTP_CONFIG.get_ontology_uri('classificationSystem'): task_classification_system,
             "_outE": []
         }
 
@@ -261,12 +265,6 @@ class CreateAPI:
                 "_targetIRI": task_iri
             })
 
-        if task_type:
-            query_dict["_outE"].append({
-                "_label": self.DTP_CONFIG.get_ontology_uri('hasTaskType'),
-                "_targetIRI": task_type
-            })
-
         payload = json.dumps([query_dict])
 
         response = self.post_guarded_request(payload=payload, url=self.DTP_CONFIG.get_api_url('add_node'))
@@ -280,17 +278,17 @@ class CreateAPI:
                 return False
         return True
 
-    def create_operation_node(self, oper_node_iri, task_type=None, target_activity_iri=None, list_of_action_iri=None,
+    def create_operation_node(self, oper_node_iri, op_classification_code=None, op_classification_system=None,, target_activity_iri=None, list_of_action_iri=None,
                               process_start=None, last_updated=None, process_end=None):
         """
         The method creates a new operation.
 
         Parameters
         ----------
-        task_type : str, obligatory
-            a valid task type from activity node.
-        oper_node_iri : str, obligatory
-            a valid IRI of a node.
+        op_classification_code : str, obligatory
+            code of a classification system to specify the type of object or process.
+        op_classification_system : str, obligatory
+            a classification system to specify the type of object or process.
         target_activity_iri : str, obligatory
             a valid activity.
         list_of_action_iri : list, optional
@@ -331,6 +329,8 @@ class CreateAPI:
             "_classes": [self.DTP_CONFIG.get_ontology_uri('asPerformedOperation')],
             "_iri": oper_node_iri,
             "_visibility": 0,
+            self.DTP_CONFIG.get_ontology_uri('classificationCode'): op_classification_code,
+            self.DTP_CONFIG.get_ontology_uri('classificationSystem'): op_classification_system,
             "_outE": [
                 *out_edge_to_actions
             ]
@@ -351,12 +351,6 @@ class CreateAPI:
                 "_targetIRI": target_activity_iri
             })
 
-        if task_type:
-            query_dict["_outE"].append({
-                "_label": self.DTP_CONFIG.get_ontology_uri('hasTaskType'),
-                "_targetIRI": task_type
-            })
-
         payload = json.dumps([query_dict])
 
         response = self.post_guarded_request(payload=payload, url=self.DTP_CONFIG.get_api_url('add_node'))
@@ -370,15 +364,12 @@ class CreateAPI:
                 return False
         return True
 
-    def create_construction_node(self, constr_node_iri, productionMethodType=None, workpkg_node_iri=None,
-                                 list_of_operation_iri=None):
+    def create_construction_node(self, constr_node_iri, workpkg_node_iri=None, list_of_operation_iri=None):
         """
         The method creates a new construction.
 
         Parameters
         ----------
-        productionMethodType : str, obligatory
-            a valid production method type from corresponding work package
         constr_node_iri : str, obligatory
             a valid IRI of a node.
         workpkg_node_iri : str, obligatory
@@ -419,12 +410,6 @@ class CreateAPI:
                 *out_edge_to_operation
             ]
         }
-
-        if productionMethodType:
-            query_dict["_outE"].append({
-                "_label": self.DTP_CONFIG.get_ontology_uri('hasProductionMethodType'),
-                "_targetIRI": productionMethodType
-            })
 
         if workpkg_node_iri:
             query_dict["_outE"].append({
