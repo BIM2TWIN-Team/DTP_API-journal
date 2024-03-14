@@ -199,7 +199,8 @@ class CreateAPI:
         return True
 
     def create_action_node(self, action_node_iri, task_classification_code=None, task_classification_system=None,
-                           task_iri=None, target_as_built_iri=None, contractor=None, process_start=None, process_end=None):
+                           task_iri=None, target_as_built_iri=None, contractor=None, process_start=None,
+                           process_end=None):
         """
         The method creates a new action.
 
@@ -278,8 +279,9 @@ class CreateAPI:
                 return False
         return True
 
-    def create_operation_node(self, oper_node_iri, op_classification_code=None, op_classification_system=None,, target_activity_iri=None, list_of_action_iri=None,
-                              process_start=None, last_updated=None, process_end=None):
+    def create_operation_node(self, oper_node_iri, op_classification_code=None, op_classification_system=None,
+                              target_activity_iri=None, list_of_action_iri=None, process_start=None, last_updated=None,
+                              process_end=None):
         """
         The method creates a new operation.
 
