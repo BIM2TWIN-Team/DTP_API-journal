@@ -1139,9 +1139,9 @@ class FetchAPI:
         req_url = self.DTP_CONFIG.get_api_url('get_find_elements') if not url else url
         return self.post_general_request(payload, req_url).json()
 
-    def fetch_workpkg_connected_asbuilt_nodes(self, workpkg_node_iri, url=None):
+    def fetch_workpkg_connected_asdesigned_nodes(self, workpkg_node_iri, url=None):
         """
-        The method fetches as-built nodes connected to a node identified by workpkg_node_iri
+        The method fetches as-designed nodes connected to a node identified by workpkg_node_iri
 
         Parameters
         ----------
@@ -1153,7 +1153,7 @@ class FetchAPI:
         Returns
         ------
         dictionary
-            JSON mapped to a dictionary. The data contain asbuilt nodes connected to workpkg_node_iri.
+            JSON mapped to a dictionary. The data contain as-designed nodes connected to workpkg_node_iri.
         """
 
         payload = json.dumps({
