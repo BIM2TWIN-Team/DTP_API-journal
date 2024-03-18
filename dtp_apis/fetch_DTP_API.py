@@ -517,6 +517,37 @@ class FetchAPI:
         req_url = self.DTP_CONFIG.get_api_url('get_find_elements') if not url else url
         return self.post_general_request(payload, req_url).json()
 
+    def fetch_workpackage_of_activity_node(self, activity_node_iri, url=None):
+        """
+        The method fetches workpackage node corresponding to an activity node
+
+        Parameters
+        ----------
+        activity_node_iri : str, obligatory
+            a valid IRI of a node.
+        url : str, optional
+            used to fetch a next page
+
+        Returns
+        ------
+        dictionary
+            JSON mapped to a dictionary. The data contain workpackage node.
+        """
+
+        payload = json.dumps({
+            "query": [
+                {
+                    "$domain": self.DTP_CONFIG.get_domain(),
+                    "$iri": activity_node_iri,
+                    "<-"+self.DTP_CONFIG.get_ontology_uri('hasActivity'): "wp"
+                }
+            ],
+            "return": "wp"
+        })
+
+        req_url = self.DTP_CONFIG.get_api_url('get_find_elements') if not url else url
+        return self.post_general_request(payload, req_url).json()
+
     def fetch_asperformed_connected_asdesigned_nodes(self, asdesigned_node_iri, url=None):
         """
         The method fetches as-performed nodes connected to an as-designed node identified with node_iri
