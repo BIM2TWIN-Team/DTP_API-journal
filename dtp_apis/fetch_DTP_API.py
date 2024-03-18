@@ -1110,7 +1110,7 @@ class FetchAPI:
 
     def fetch_workpkg_connected_asdesigned_nodes(self, workpkg_node_iri, url=None):
         """
-        The method fetches as-built nodes connected to a node identified by workpkg_node_iri
+        The method fetches as-designed nodes connected to a node identified by workpkg_node_iri
 
         Parameters
         ----------
@@ -1122,7 +1122,7 @@ class FetchAPI:
         Returns
         ------
         dictionary
-            JSON mapped to a dictionary. The data contain asbuilt nodes connected to workpkg_node_iri.
+            JSON mapped to a dictionary. The data contain as-designed nodes connected to workpkg_node_iri.
         """
 
         payload = json.dumps({
