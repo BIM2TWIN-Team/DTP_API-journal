@@ -539,7 +539,7 @@ class FetchAPI:
                 {
                     "$domain": self.DTP_CONFIG.get_domain(),
                     "$iri": activity_node_iri,
-                    "<-"+self.DTP_CONFIG.get_ontology_uri('hasActivity'): "wp"
+                    "<-" + self.DTP_CONFIG.get_ontology_uri('hasActivity'): "wp"
                 }
             ],
             "return": "wp"
@@ -1196,6 +1196,103 @@ class FetchAPI:
                 }
             ],
             "return": "asdesigned"
+        })
+
+        req_url = self.DTP_CONFIG.get_api_url('get_find_elements') if not url else url
+        return self.post_general_request(payload, req_url).json()
+
+    def fetch_workpkg_required_process(self, workpkg_node_iri, url=None):
+        """
+        The method fetches work package nodes connected to a given work package node identified by workpkg_node_iri
+        with requiresProcess relation
+
+        workpackage --(hasPrecondition)--> Precondition --(requiresProcess)--> workpackage
+
+        Parameters
+        ----------
+        workpkg_node_iri : str, obligatory
+            a valid IRI of a node.
+        url : str, optional
+            used to fetch a next page
+
+        Returns
+        ------
+        dictionary
+            JSON mapped to a dictionary. The data contain work package nodes connected to workpkg_node_iri.
+        """
+
+        payload = json.dumps({
+            "query": [{
+                "$iri": workpkg_node_iri,
+                "$domain": self.DTP_CONFIG.get_domain(),
+                "->" + self.DTP_CONFIG.get_ontology_uri('hasPrecondition'): {
+                    "$alias": "Precondition"
+                }
+            },
+                {
+                    "$alias": "Precondition",
+                    "->" + self.DTP_CONFIG.get_ontology_uri('requiresProcess'): {
+                        "$alias": "wp"
+                    }
+                },
+                {
+                    "$alias": "wp",
+                    "$classes": {
+                        "$contains": self.DTP_CONFIG.get_ontology_uri('WorkPackage')
+                    }
+                }
+            ],
+            "return": "wp"
+        })
+
+        req_url = self.DTP_CONFIG.get_api_url('get_find_elements') if not url else url
+        return self.post_general_request(payload, req_url).json()
+
+    def fetch_construction_required_process(self, workpkg_node_iri, url=None):
+        """
+        The method fetches construction nodes connected to a work package that has inverse requiresProcess relation to
+        a work package identified by workpkg_node_iri
+
+        workpackage <--(requiresProcess)-- Precondition <--(requiresProcess)-- workpackage --(requiresProcess)--> construction
+
+        Parameters
+        ----------
+        workpkg_node_iri : str, obligatory
+            a valid IRI of a node.
+        url : str, optional
+            used to fetch a next page
+
+        Returns
+        ------
+        dictionary
+            JSON mapped to a dictionary. The construction node(s).
+        """
+
+        payload = json.dumps({
+            "query": [{
+                "$iri": workpkg_node_iri,
+                "$domain": self.DTP_CONFIG.get_domain(),
+                "<-" + self.DTP_CONFIG.get_ontology_uri('requiresProcess'): {
+                    "$alias": "requiresProcess"
+                }
+            },
+                {
+                    "$alias": "requiresProcess",
+                    "<-" + self.DTP_CONFIG.get_ontology_uri('hasPrecondition'): {
+                        "$alias": "wp"
+                    }
+                },
+                {
+                    "$alias": "wp",
+                    "$classes": {
+                        "$contains": self.DTP_CONFIG.get_ontology_uri('WorkPackage')
+                    },
+                    "->" + self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'): {
+                        "$alias": "con"
+                    }
+                }
+            ],
+            "return": "con"
         })
 
         req_url = self.DTP_CONFIG.get_api_url('get_find_elements') if not url else url
