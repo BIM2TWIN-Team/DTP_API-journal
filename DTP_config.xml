@@ -95,6 +95,8 @@
         <URI function="constructionSchedule" type="xs:anyURI">
             https://dtc-ontology.cms.ed.tum.de/ontology#ConstructionSchedule
         </URI>
+        <URI function="hasPrecondition" type="xs:anyURI">https://dtc-ontology.cms.ed.tum.de/ontology#hasPrecondition</URI>
+        <URI function="requiresProcess" type="xs:anyURI">https://dtc-ontology.cms.ed.tum.de/ontology#requiresProcess</URI>
         <URI function="Wall" type="xs:anyURI">https://pi.pauwel.be/voc/buildingelement#Wall</URI>
         <URI function="Column" type="xs:anyURI">https://pi.pauwel.be/voc/buildingelement#Column</URI>
         <URI function="Covering" type="xs:anyURI">https://pi.pauwel.be/voc/buildingelement#Covering</URI>
