@@ -1287,7 +1287,7 @@ class FetchAPI:
                     "$classes": {
                         "$contains": self.DTP_CONFIG.get_ontology_uri('workpackage')
                     },
-                    "->" + self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'): {
+                    "<-" + self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'): {
                         "$alias": "con"
                     }
                 }
