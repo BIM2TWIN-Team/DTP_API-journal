@@ -117,19 +117,12 @@ class UpdateAPI:
         with open(dump_path, 'w') as fp:
             json.dump(node_info, fp)
 
-        out_edge_dict = {}
-        if target_as_built_iri:
-            out_edge_dict = {
-                "_label": self.DTP_CONFIG.get_ontology_uri('hasAction'),
-                "_targetIRI": target_as_built_iri
-            }
-
         query_dict = {
             "_domain": self.DTP_CONFIG.get_domain(),
             "_iri": action_node_iri,
             self.DTP_CONFIG.get_ontology_uri('classificationCode'): task_classification_code,
             self.DTP_CONFIG.get_ontology_uri('classificationSystem'): task_classification_system,
-            "_outE": [out_edge_dict]
+            "_outE": []
         }
 
         if contractor:
@@ -140,6 +133,13 @@ class UpdateAPI:
                 "_label": self.DTP_CONFIG.get_ontology_uri('hasTarget'),
                 "_targetIRI": target_as_built_iri
             })
+
+        if target_as_built_iri:
+            query_dict["_outE"].append({
+                "_label": self.DTP_CONFIG.get_ontology_uri('hasAction'),
+                "_targetIRI": target_as_built_iri
+            })
+
         if task_iri:
             query_dict["_outE"].append({
                 "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
