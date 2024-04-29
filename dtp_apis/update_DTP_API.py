@@ -327,7 +327,7 @@ class UpdateAPI:
                 return False
         return True
 
-    def update_construction_node(self, constr_node_iri, workpkg_node_iri, list_of_operation_iri=None):
+    def update_construction_node(self, constr_node_iri, workpkg_node_iri=None, list_of_operation_iri=None):
         """
         The method updates construction node.
 
