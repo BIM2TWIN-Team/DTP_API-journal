@@ -395,7 +395,7 @@ class RevertAPI:
 
     def unlink_action_asbuilt(self, action_node_iri, target_asbuilt_iri):
         """
-        Unlink construction and operation node
+        Unlink action and asbuilt node
 
         Parameters
         ----------
