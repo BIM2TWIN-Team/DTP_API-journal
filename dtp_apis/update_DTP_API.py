@@ -21,6 +21,8 @@
 import json
 import os
 
+import validators
+
 from helpers import logger_global
 
 
@@ -74,6 +76,77 @@ class UpdateAPI:
                 return True
             else:
                 logger_global.error("Updating nodes failed. Response code: " + str(response.status_code))
+                return False
+        return True
+
+    def update_asbuilt_node(self, element_iri_uri, progress=None, timestamp=None, element_type=None, target_iri=None):
+        """
+        The method update as-Built elements.
+
+        Parameters
+        ----------
+        element_iri_uri : str, obligatory
+            the full IRI of the As-Built element
+        progress : int, obligatory
+            the progress in percentage of the As-Built element
+        timestamp : datetime, obligatory
+            associated timestamp in the isoformat(sep="T", timespec="seconds")
+        element_type : str, obligatory
+            element type as defined by the ontology, normally it should be
+            the same type as the type of the corresponding As-Designed element
+        target_iri : str, obligatory
+            the IRI of the associated element; here it should correspond to the IRI
+            of the respective As-Designed element
+
+        Raises
+        ------
+        It can raise an exception if the target or element IRIs are not valid URIs
+
+        Returns
+        ------
+        bool
+            True if the element has been updated without an error, and False otherwise
+        """
+
+        if not validators.url(element_iri_uri):
+            raise Exception("Sorry, the target IRI is not a valid URL.")
+
+        if not validators.url(target_iri):
+            raise Exception("Sorry, the target IRI is not a valid URL.")
+
+        query_dict = {
+            "_classes": [self.DTP_CONFIG.get_ontology_uri('classElement'), element_type],
+            "_domain": self.DTP_CONFIG.get_domain(),
+            "_iri": element_iri_uri,
+            "_visibility": 0,
+            "_outE": []
+        }
+
+        if timestamp:
+            query_dict[self.DTP_CONFIG.get_ontology_uri('timeStamp')] = timestamp
+
+        if progress:
+            query_dict[self.DTP_CONFIG.get_ontology_uri('progress')] = progress
+
+        if target_iri:
+            query_dict["_outE"].append({
+                "_label": self.DTP_CONFIG.get_ontology_uri('hasTarget'),
+                "_targetIRI": target_iri
+            })
+
+        if progress == 100:
+            query_dict[self.DTP_CONFIG.get_ontology_uri('hasGeometryStatusType')] = self.DTP_CONFIG.get_ontology_uri(
+                'CompletelyDetected')
+
+        payload = json.dumps([query_dict])
+        response = self.post_guarded_request(payload=payload, url=self.DTP_CONFIG.get_api_url('update_set'))
+        if not self.simulation_mode:
+            if response.ok:
+                if self.session_logger is not None:
+                    self.session_logger.info("DTP_API - UPDATE_ELEMENT_IRI: " + element_iri_uri)
+                return True
+            else:
+                logger_global.error("Updating as-built node failed. Response code: " + str(response.status_code))
                 return False
         return True
 
