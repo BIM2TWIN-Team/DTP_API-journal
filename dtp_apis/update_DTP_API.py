@@ -358,7 +358,7 @@ class UpdateAPI:
 
         # update node if operation iri list has at least one item
         out_edge_to_operation = []
-        if len(list_of_operation_iri):
+        if list_of_operation_iri:
             # collecting already existing edges
             already_existing_edges = node_info['items'][0]['_outE']
             out_edge_to_operation = [*already_existing_edges]
