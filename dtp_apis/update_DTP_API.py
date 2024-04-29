@@ -116,12 +116,13 @@ class UpdateAPI:
                 raise Exception("Sorry, the target IRI is not a valid URL.")
 
         query_dict = {
-            "_classes": [self.DTP_CONFIG.get_ontology_uri('classElement'), element_type],
             "_domain": self.DTP_CONFIG.get_domain(),
             "_iri": element_iri_uri,
-            "_visibility": 0,
-            "_outE": []
+            "_visibility": 0
         }
+
+        if element_type:
+            query_dict["_classes"] = [self.DTP_CONFIG.get_ontology_uri('classElement'), element_type]
 
         if timestamp:
             query_dict[self.DTP_CONFIG.get_ontology_uri('timeStamp')] = timestamp
@@ -129,15 +130,17 @@ class UpdateAPI:
         if progress:
             query_dict[self.DTP_CONFIG.get_ontology_uri('progress')] = progress
 
-        if target_iri:
-            query_dict["_outE"].append({
-                "_label": self.DTP_CONFIG.get_ontology_uri('hasTarget'),
-                "_targetIRI": target_iri
-            })
-
         if progress == 100:
             query_dict[self.DTP_CONFIG.get_ontology_uri('hasGeometryStatusType')] = self.DTP_CONFIG.get_ontology_uri(
                 'CompletelyDetected')
+
+        if target_iri:
+            query_dict["_outE"] = [
+                {
+                    "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
+                    "_targetIRI": target_iri
+                }
+            ]
 
         payload = json.dumps([query_dict])
         response = self.post_guarded_request(payload=payload, url=self.DTP_CONFIG.get_api_url('update_set'))
@@ -196,29 +199,32 @@ class UpdateAPI:
             "_iri": action_node_iri,
             self.DTP_CONFIG.get_ontology_uri('classificationCode'): task_classification_code,
             self.DTP_CONFIG.get_ontology_uri('classificationSystem'): task_classification_system,
-            "_outE": []
         }
 
         if contractor:
             query_dict[self.DTP_CONFIG.get_ontology_uri('constructionContractor')] = contractor
 
+        out_edges = []
         if target_as_built_iri:
-            query_dict["_outE"].append({
+            out_edges.append({
                 "_label": self.DTP_CONFIG.get_ontology_uri('hasTarget'),
                 "_targetIRI": target_as_built_iri
             })
 
         if target_as_built_iri:
-            query_dict["_outE"].append({
+            out_edges.append({
                 "_label": self.DTP_CONFIG.get_ontology_uri('hasAction'),
                 "_targetIRI": target_as_built_iri
             })
 
         if task_iri:
-            query_dict["_outE"].append({
+            out_edges.append({
                 "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
                 "_targetIRI": task_iri
             })
+
+        if out_edges:
+            query_dict["_outE"] = out_edges
 
         if process_start:
             query_dict[self.DTP_CONFIG.get_ontology_uri('processStart')] = process_start
@@ -297,7 +303,6 @@ class UpdateAPI:
             "_iri": oper_node_iri,
             self.DTP_CONFIG.get_ontology_uri('classificationCode'): op_classification_code,
             self.DTP_CONFIG.get_ontology_uri('classificationSystem'): op_classification_system,
-            "_outE": out_edge_to_actions
         }
 
         if process_start:
@@ -310,10 +315,13 @@ class UpdateAPI:
             query_dict[self.DTP_CONFIG.get_ontology_uri('processEnd')] = process_end
 
         if target_activity_iri:
-            query_dict["_outE"].append({
+            out_edge_to_actions.append({
                 "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
                 "_targetIRI": target_activity_iri
             })
+
+        if out_edge_to_actions:
+            query_dict["_outE"] = out_edge_to_actions
 
         payload = json.dumps([query_dict])
 
@@ -378,10 +386,13 @@ class UpdateAPI:
         }
 
         if workpkg_node_iri:
-            query_dict["_outE"].append({
+            out_edge_to_operation.append({
                 "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
                 "_targetIRI": workpkg_node_iri
             })
+
+        if out_edge_to_operation:
+            query_dict["_outE"] = out_edge_to_operation
 
         payload = json.dumps([query_dict])
 
