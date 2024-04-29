@@ -86,9 +86,9 @@ class UpdateAPI:
         Parameters
         ----------
         element_iri_uri : str, obligatory
-            the full IRI of the new As-Built element
+            the full IRI of the As-Built element
         progress : int, obligatory
-            the progress in percentage of the new As-Built element
+            the progress in percentage of the As-Built element
         timestamp : datetime, obligatory
             associated timestamp in the isoformat(sep="T", timespec="seconds")
         element_type : str, obligatory
