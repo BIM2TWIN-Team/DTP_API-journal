@@ -111,8 +111,9 @@ class UpdateAPI:
         if not validators.url(element_iri_uri):
             raise Exception("Sorry, the target IRI is not a valid URL.")
 
-        if not validators.url(target_iri):
-            raise Exception("Sorry, the target IRI is not a valid URL.")
+        if target_iri:
+            if not validators.url(target_iri):
+                raise Exception("Sorry, the target IRI is not a valid URL.")
 
         query_dict = {
             "_classes": [self.DTP_CONFIG.get_ontology_uri('classElement'), element_type],
