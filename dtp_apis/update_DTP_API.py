@@ -284,8 +284,12 @@ class UpdateAPI:
             # collecting already existing edges
             already_existing_edges = node_info['items'][0]['_outE']
             out_edge_to_actions = [*already_existing_edges]
+            already_existing_edges_iri = [edge_dict["_targetIRI"] for edge_dict in out_edge_to_actions]
+
             # create new out edges list of dictionaries
             for action_iri in list_of_action_iri:
+                if action_iri in already_existing_edges_iri:
+                    continue
                 out_edge_dict = {
                     "_label": self.DTP_CONFIG.get_ontology_uri('hasAction'),
                     "_targetIRI": action_iri
@@ -360,33 +364,37 @@ class UpdateAPI:
             json.dump(node_info, fp)
 
         # update node if operation iri list has at least one item
-        out_edge_to_operation = []
+        out_edge_to_constrcution = []
         if list_of_operation_iri:
             # collecting already existing edges
             already_existing_edges = node_info['items'][0]['_outE']
-            out_edge_to_operation = [*already_existing_edges]
+            out_edge_to_constrcution = [*already_existing_edges]
+            already_existing_edges_iri = [edge_dict["_targetIRI"] for edge_dict in out_edge_to_constrcution]
+
             # create new out edges list of dictionaries
-            for action_iri in list_of_operation_iri:
+            for operation_iri in list_of_operation_iri:
+                if operation_iri in already_existing_edges_iri:
+                    continue
                 out_edge_dict = {
                     "_label": self.DTP_CONFIG.get_ontology_uri('hasOperation'),
-                    "_targetIRI": action_iri
+                    "_targetIRI": operation_iri
                 }
-                out_edge_to_operation.append(out_edge_dict)
+                out_edge_to_constrcution.append(out_edge_dict)
 
         query_dict = {
             "_domain": self.DTP_CONFIG.get_domain(),
             "_iri": constr_node_iri,
-            "_outE": out_edge_to_operation
+            "_outE": out_edge_to_constrcution
         }
 
         if workpkg_node_iri:
-            out_edge_to_operation.append({
+            out_edge_to_constrcution.append({
                 "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
                 "_targetIRI": workpkg_node_iri
             })
 
-        if out_edge_to_operation:
-            query_dict["_outE"] = out_edge_to_operation
+        if out_edge_to_constrcution:
+            query_dict["_outE"] = out_edge_to_constrcution
 
         payload = json.dumps([query_dict])
 
