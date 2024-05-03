@@ -279,13 +279,11 @@ class UpdateAPI:
         with open(dump_path, 'w') as fp:
             json.dump(node_info, fp)
 
-        out_edge_to_actions = []
+        # collecting already existing edges
+        already_existing_edges = node_info['items'][0]['_outE']
+        out_edge_to_actions = [*already_existing_edges]
+        already_existing_edges_iri = [edge_dict["_targetIRI"] for edge_dict in already_existing_edges]
         if list_of_action_iri:
-            # collecting already existing edges
-            already_existing_edges = node_info['items'][0]['_outE']
-            out_edge_to_actions = [*already_existing_edges]
-            already_existing_edges_iri = [edge_dict["_targetIRI"] for edge_dict in out_edge_to_actions]
-
             # create new out edges list of dictionaries
             for action_iri in list_of_action_iri:
                 if action_iri in already_existing_edges_iri:
@@ -313,10 +311,11 @@ class UpdateAPI:
             query_dict[self.DTP_CONFIG.get_ontology_uri('processEnd')] = process_end
 
         if target_activity_iri:
-            out_edge_to_actions.append({
-                "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
-                "_targetIRI": target_activity_iri
-            })
+            if target_activity_iri not in already_existing_edges_iri:
+                out_edge_to_actions.append({
+                    "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
+                    "_targetIRI": target_activity_iri
+                })
 
         if out_edge_to_actions:
             query_dict["_outE"] = out_edge_to_actions
@@ -364,13 +363,11 @@ class UpdateAPI:
             json.dump(node_info, fp)
 
         # update node if operation iri list has at least one item
-        out_edge_to_constrcution = []
+        # collecting already existing edges
+        already_existing_edges = node_info['items'][0]['_outE']
+        out_edge_to_constrcution = [*already_existing_edges]
+        already_existing_edges_iri = [edge_dict["_targetIRI"] for edge_dict in already_existing_edges]
         if list_of_operation_iri:
-            # collecting already existing edges
-            already_existing_edges = node_info['items'][0]['_outE']
-            out_edge_to_constrcution = [*already_existing_edges]
-            already_existing_edges_iri = [edge_dict["_targetIRI"] for edge_dict in out_edge_to_constrcution]
-
             # create new out edges list of dictionaries
             for operation_iri in list_of_operation_iri:
                 if operation_iri in already_existing_edges_iri:
@@ -388,10 +385,11 @@ class UpdateAPI:
         }
 
         if workpkg_node_iri:
-            out_edge_to_constrcution.append({
-                "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
-                "_targetIRI": workpkg_node_iri
-            })
+            if workpkg_node_iri not in already_existing_edges_iri:
+                out_edge_to_constrcution.append({
+                    "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
+                    "_targetIRI": workpkg_node_iri
+                })
 
         if out_edge_to_constrcution:
             query_dict["_outE"] = out_edge_to_constrcution
