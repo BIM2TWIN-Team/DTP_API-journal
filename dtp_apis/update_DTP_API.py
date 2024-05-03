@@ -211,12 +211,6 @@ class UpdateAPI:
                 "_targetIRI": target_as_built_iri
             })
 
-        if target_as_built_iri:
-            out_edges.append({
-                "_label": self.DTP_CONFIG.get_ontology_uri('hasAction'),
-                "_targetIRI": target_as_built_iri
-            })
-
         if task_iri:
             out_edges.append({
                 "_label": self.DTP_CONFIG.get_ontology_uri('intentStatusRelation'),
@@ -374,7 +368,7 @@ class UpdateAPI:
             # create new out edges list of dictionaries
             for action_iri in list_of_operation_iri:
                 out_edge_dict = {
-                    "_label": self.DTP_CONFIG.get_ontology_uri('hasAction'),
+                    "_label": self.DTP_CONFIG.get_ontology_uri('hasOperation'),
                     "_targetIRI": action_iri
                 }
                 out_edge_to_operation.append(out_edge_dict)
