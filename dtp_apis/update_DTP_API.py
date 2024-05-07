@@ -143,7 +143,7 @@ class UpdateAPI:
             ]
 
         payload = json.dumps([query_dict])
-        response = self.post_guarded_request(payload=payload, url=self.DTP_CONFIG.get_api_url('update_set'))
+        response = self.put_guarded_request(payload=payload, url=self.DTP_CONFIG.get_api_url('update_set'))
         if not self.simulation_mode:
             if response.ok:
                 if self.session_logger is not None:
