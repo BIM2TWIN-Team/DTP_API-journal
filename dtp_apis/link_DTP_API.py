@@ -186,13 +186,13 @@ class LinkAPI:
             "_outE": out_edge_to_actions
         }])
 
-        out_edges = [x['_targetIRI'] for x in out_edge_to_actions]
+        old_out_edges = [x['_targetIRI'] for x in already_existing_edges]
         response = self.put_guarded_request(payload=payload, url=self.DTP_CONFIG.get_api_url('update_set'))
         if not self.simulation_mode:
             if response.ok:
                 if self.session_logger is not None:
                     self.session_logger.info(
-                        f"DTP_API - NEW_LINK_OPERATION_ACTION: {oper_node_iri}, {out_edges}")
+                        f"DTP_API - NEW_LINK_OPERATION_ACTION: {oper_node_iri}, {old_out_edges}")
                 return True
             else:
                 logger_global.error("Linking nodes failed. Response code: " + str(response.status_code))
@@ -272,13 +272,13 @@ class LinkAPI:
             "_outE": out_edge_to_operation
         }])
 
-        out_edges = [x['_targetIRI'] for x in out_edge_to_operation]
+        old_out_edges = [x['_targetIRI'] for x in already_existing_edges]
         response = self.put_guarded_request(payload=payload, url=self.DTP_CONFIG.get_api_url('update_set'))
         if not self.simulation_mode:
             if response.ok:
                 if self.session_logger is not None:
                     self.session_logger.info(
-                        f"DTP_API - NEW_LINK_CONSTR_OPERATION: {constr_node_iri}, {out_edges}")
+                        f"DTP_API - NEW_LINK_CONSTR_OPERATION: {constr_node_iri}, {old_out_edges}")
                 return True
             else:
                 logger_global.error("Linking nodes failed. Response code: " + str(response.status_code))
